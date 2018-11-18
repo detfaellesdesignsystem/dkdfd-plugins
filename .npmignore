@@ -1,0 +1,9 @@
+# Ensure that src and dist are published
+!dist/
+!src/
+
+build/
+.github/
+.editorconfig
+.eslintrc.yml
+package-lock.json
