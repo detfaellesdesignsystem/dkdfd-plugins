@@ -18,7 +18,7 @@ fractal.set('project.title', 'Frontend Styleguide - Plugins');
 const components = fractal.components;
 components.set('ext', '.njk');
 components.set('path', 'src/components');
-components.set('default.preview', '@dkfds');
+components.set('default.preview', '@dkdfd-plugins');
 components.set('default.context', context);
 
 // use Nunjucks as the templating engine

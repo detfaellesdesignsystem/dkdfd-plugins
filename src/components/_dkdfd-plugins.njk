@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="da">
+  <head>
+    <title>{{ _self.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Vendor example stylesheets (Select2 and Datatables)-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.7/css/select.dataTables.min.css">
+
+    <!-- Frontend styleguide stylesheet-->
+    <link rel="stylesheet" href="{{ dkfds.path }}/dkfds/css/dkfds.min.css">
+    <!-- Frontend styleguide plugin theme stylesheet-->
+    <link rel="stylesheet" href="{{ dkfds.path }}/css/dkfds-datatables-theme.min.css">
+
+  </head>
+  <body>
+    <div class="hide-base-svg">
+      {% include "all-svg-icons.svg"  %}<!--included in fractalfile.js-->
+    </div>
+    {% block body %}{{ yield }}{% endblock %}
+    <!--<script src="{{ dkfds.path }}/js/dkfds.js"></script>
+    <script src="{{ dkfds.path }}/js/dkfds-vendor-examples.js"></script>-->
+    <script src="{{ dkfds.path }}/dkfds/js/dkfds.min.js"></script>
+    <script src="{{ dkfds.path }}/js/dkfds-datatables-examples.min.js"></script>
+  </body>
+</html>
+
+

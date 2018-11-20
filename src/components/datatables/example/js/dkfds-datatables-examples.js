@@ -1,9 +1,9 @@
 'use strict';
 const $  = require( 'jquery' );
-window.$ = $;
-//const microModal = require("../../vendor/micromodal.js");
-//const dropdown = require('../../../../js/components/dropdown');
-const dt = require( 'datatables.net' )( window, $ ); //COre datatables
+window.$ = window.jQuery = $
+const microModal = require("dkfds/src/vendor/micromodal.js");
+const dropdown = require('dkfds/src/js/components/dropdown.js');
+const dt = require( 'datatables.net' )( window, $ ); //Core datatables
 const dt_select =require( 'datatables.net-select' )( window, $ ); //Makes datatable rows selectable
 const dt_responsive =require( 'datatables.net-responsive' )( window, $ ); //Makes datatables responsive
 

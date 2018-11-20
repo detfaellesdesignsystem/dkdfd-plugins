@@ -39,29 +39,29 @@ table.dataTable {
         }
         .sorting {
             &:after {
-                background-image: url('#{$icons-folder-path}/sort-none.svg');  //sort_both
+                //background-image: url('#{$icons-folder-path}/sort-none.svg');  //sort_both
                 opacity: .75;
             }
         }
         .sorting_asc {
             &:after {
-                background-image: url('#{$icons-folder-path}/sort-acending.svg'); //sort_asc
+                //background-image: url('#{$icons-folder-path}/sort-acending.svg'); //sort_asc
             }
             //background-image: url('../images/.png');
         }
         .sorting_desc {
             &:after {
-                background-image: url('#{$icons-folder-path}/sort-descending.svg'); //sort_desc
+                //background-image: url('#{$icons-folder-path}/sort-descending.svg'); //sort_desc
             }
         }
         .sorting_asc_disabled {
             &:after {
-                background-image: url('#{$icons-folder-path}/sort-acending.svg'); //sort_asc -> disabled
+                //background-image: url('#{$icons-folder-path}/sort-acending.svg'); //sort_asc -> disabled
             }
         }
         .sorting_desc_disabled {
             &:after {
-                background-image: url('#{$icons-folder-path}/sort-descending.svg'); //sort_desc -> disabled
+                //background-image: url('#{$icons-folder-path}/sort-descending.svg'); //sort_desc -> disabled
             }
         }
     }
@@ -146,7 +146,7 @@ table.dataTable {
     //Responsive collapsed (plus icon)
     &.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child, &.dtr-inline.collapsed>tbody>tr[role="row"]>th:first-child{
         &:before{
-            background-image: url('#{$icons-folder-path}/plus.svg');
+            //background-image: url('#{$icons-folder-path}/plus.svg');
             height: 24px;
             width: 24px;
             background-color: transparent;
@@ -163,7 +163,7 @@ table.dataTable {
             box-shadow: inset 2px 0 0 0 #454545;
         }
         &:before{
-            background-image: url('#{$icons-folder-path}/minus.svg') !important;
+            //background-image: url('#{$icons-folder-path}/minus.svg') !important;
         }
     }
 

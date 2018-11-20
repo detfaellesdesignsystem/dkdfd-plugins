@@ -22,15 +22,15 @@ gulp.task('copy-dist-sass', function () {
   return stream;
 });
 
-gulp.task(task, ['copy-dist-sass' ], function () {  //['copy-vendor-sass', 'copy-dist-sass' ], 
+gulp.task(task, ['copy-dist-sass' ], function () { 
 
   dutil.logMessage(task, 'Compiling Sass');
 
   var stream = gulp.src(
     [
       'src/components/datatables/style/dkfds-datatables-theme.scss',
-      'src/vendor/dkfds-components.scss'
-    ]) //, 'src/stylesheets/dkfds-borgerdk.scss'
+      'src/components/select2/style/dkdfd-selectwoo-theme.scss',
+    ]) 
     // 1. do the version replacement
     .pipe(replace(
       /\bdkfds plugins @version\b/g,
