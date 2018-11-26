@@ -29,7 +29,7 @@ gulp.task(task, ['copy-dist-sass' ], function () {
   var stream = gulp.src(
     [
       'src/components/datatables/style/dkfds-datatables-theme.scss',
-      'src/components/select2/style/dkdfd-selectwoo-theme.scss',
+      'src/components/selectwoo/style/dkfds-selectwoo-theme.scss',
     ]) 
     // 1. do the version replacement
     .pipe(replace(

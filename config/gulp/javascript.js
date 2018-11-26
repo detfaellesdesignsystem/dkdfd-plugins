@@ -17,7 +17,8 @@ gulp.task(task, function (done) {
   dutil.logMessage(task, 'Compiling JavaScript');
   
   var files = [
-      'src/components/datatables/example/js/dkfds-datatables-examples.js'
+      'src/components/datatables/example/js/dkfds-datatables-examples.js',
+      'src/components/selectwoo/example/js/dkfds-selectwoo-examples.js'
   ];
 
   //Create a bundle for each starting file in the list above. 

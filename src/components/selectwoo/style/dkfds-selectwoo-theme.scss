@@ -60,6 +60,9 @@
   .select2-dropdown{
     border: $outer-border;
   }
+  .select2-results__options{
+    max-width: 100% !important;
+  }
   //Result option:
   .select2-results__option{ //Option Item
     border-bottom: $inner-border;

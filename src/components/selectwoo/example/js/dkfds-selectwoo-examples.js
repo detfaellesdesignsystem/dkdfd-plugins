@@ -1,7 +1,7 @@
 window.$ = window.jQuery = require("jquery");
-const selectwoo = require('selectwoo')();
+const selectWoo = require('select-woo')();
 
-const jsSelectorSelectwoo_Example1 = `#js-selectwoo-example1`;
+const jsSelectorSelectwoo_Example1 = '#js-selectwoo-example1';
 
 class selectwooExamples {
   constructor(el){
@@ -18,5 +18,7 @@ class selectwooExamples {
     $(jsSelectorSelectwoo_Example1).removeClass('d-none'); //avoid flash of unstyled content. 
   }
 }
+
+new selectwooExamples();
 
 module.exports = selectwooExamples; 

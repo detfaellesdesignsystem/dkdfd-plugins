@@ -1,4 +1,8 @@
 
+
+@import "../../../../node_modules/dkfds/src/stylesheets/core/variables";
+@import "../../../../node_modules/dkfds/src/stylesheets/core/mixins/mixins";
+
 /*
   Styling for selectWoo/select2 component.
 */
@@ -55,6 +59,9 @@
   
   .select2-dropdown{
     border: $outer-border;
+  }
+  .select2-results__options{
+    max-width: 100% !important;
   }
   //Result option:
   .select2-results__option{ //Option Item
