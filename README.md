@@ -30,10 +30,9 @@ This downloades the plugin project to the node_modules/dkfds-plugins folder.
 
 ## Using the plugins project
 
-Only the css-themes are to be used by projects. The HTML and javascript are just exmaple code showing how e.g. datatables are implemented.  
+Only the css-themes are to be used. The HTML and javascript are just example code showing how e.g. datatables are implemented.  
 
 To include a theme simply include the one of the files from the /dist/css folder:
-
 ```sh
 <link rel="stylesheet" href="[path-to-plugins-project]/dist/css/dkfds-datatables-theme.min.css">
 ``` 
