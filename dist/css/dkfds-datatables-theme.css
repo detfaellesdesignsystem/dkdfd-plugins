@@ -83,21 +83,11 @@ table.dataTable tbody tr.child ul.dtr-details li:last-child {
 }
 
 table.dataTable tbody tr.selected-row {
-  /*td{
-                border-bottom: 3px solid $color-gray-light;
-                padding-bottom: calc(calc(16px - 1px) - 3px);
-                border-top: 2px solid $color-gray-light;
-                padding-top: calc(calc(16px - 1px) - 2px);
-                &:first-child{
-                    border-left: 2px solid $color-gray-light;
-                    padding-left: calc(calc(16px - 1px) - 2px);
-                }
-                &:last-child{
-                    border-right: 2px solid $color-gray-light;
-                    padding-left: calc(calc(16px - 1px) - 2px);
-                }
-            }*/
-  background-color: #CCF2F3 !important;
+  background-color: #DCDCDC !important;
+}
+
+table.dataTable tbody tr.selected-row + tr.child {
+  background-color: #DCDCDC !important;
 }
 
 table.dataTable tbody .details-row-content {
@@ -163,7 +153,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td:first-child, table
 }
 
 table.dataTable.no-footer {
-  border-bottom: 1px solid #999999;
+  border-bottom: 1px solid #747474;
 }
 
 table.dataTable.table--zebra tr.odd {
@@ -204,7 +194,7 @@ table.dataTable .overflow-menu .overflow-list li {
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
   color: #1a1a1a !important;
-  border: 1px solid #999999;
+  border: 1px solid #747474;
   background: #F5F5F5;
 }
 
@@ -224,7 +214,7 @@ table.dataTable .overflow-menu .overflow-list li {
   margin-left: 8px;
   margin-right: 8px;
   background-color: #ffffff;
-  border: 1px solid #999999;
+  border: 1px solid #747474;
   border-radius: 4px;
   color: #1a1a1a;
   font-size: 1.6rem;
@@ -252,7 +242,7 @@ table.dataTable .overflow-menu .overflow-list li {
 }
 
 .dataTables_filter input[type=search] {
-  border: 1px solid #999999;
+  border: 1px solid #747474;
   border-radius: 4px;
   color: #1a1a1a;
   font-size: 1.6rem;

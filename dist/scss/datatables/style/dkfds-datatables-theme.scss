@@ -91,25 +91,10 @@ table.dataTable {
 
         //Selected row
         tr.selected-row{
-
-            /*td{
-                border-bottom: 3px solid $color-gray-light;
-                padding-bottom: calc(#{$datatables-cell-padding} - 3px);
-                border-top: 2px solid $color-gray-light;
-                padding-top: calc(#{$datatables-cell-padding} - 2px);
-                &:first-child{
-                    border-left: 2px solid $color-gray-light;
-                    padding-left: calc(#{$datatables-cell-padding} - 2px);
-                }
-                &:last-child{
-                    border-right: 2px solid $color-gray-light;
-                    padding-left: calc(#{$datatables-cell-padding} - 2px);
-                }
-            }*/
-            background-color: #CCF2F3!important;
-            //& + tr.child{ //child row (the expanded row) should have same color as parent. 
-                //background-color: $color-gray-light !important;
-            //}
+            background-color: $color-gray-mediumpale !important;
+            & + tr.child{ //child row (the expanded row) should have same color as parent. 
+                background-color: $color-gray-mediumpale !important;
+            }
         }
         //Expanded row inner content
         .details-row-content {
