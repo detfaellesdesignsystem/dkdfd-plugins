@@ -83,11 +83,21 @@ table.dataTable tbody tr.child ul.dtr-details li:last-child {
 }
 
 table.dataTable tbody tr.selected-row {
-  background-color: #BFBFBF !important;
-}
-
-table.dataTable tbody tr.selected-row + tr.child {
-  background-color: #BFBFBF !important;
+  /*td{
+                border-bottom: 3px solid $color-gray-light;
+                padding-bottom: calc(calc(16px - 1px) - 3px);
+                border-top: 2px solid $color-gray-light;
+                padding-top: calc(calc(16px - 1px) - 2px);
+                &:first-child{
+                    border-left: 2px solid $color-gray-light;
+                    padding-left: calc(calc(16px - 1px) - 2px);
+                }
+                &:last-child{
+                    border-right: 2px solid $color-gray-light;
+                    padding-left: calc(calc(16px - 1px) - 2px);
+                }
+            }*/
+  background-color: #CCF2F3 !important;
 }
 
 table.dataTable tbody .details-row-content {

@@ -27166,7 +27166,7 @@ var datatablesExamples = function datatablesExamples(el) {
             targets: 0,
             render: function render(data, type, full, meta) {
                 var checkboxid = "checkbox-" + Math.random().toString(36).substring(7);
-                return "<div class='form-group'>" + "<input id='" + checkboxid + "' type='checkbox' name='checked'>" + "<label for='" + checkboxid + "' ></label>" + "</div>";
+                return "<div class='form-group'>" + "<input id='" + checkboxid + "' type='checkbox' name='checked' class='form-checkbox'>" + "<label for='" + checkboxid + "' ></label>" + "</div>";
             }
         }],
         /*select: {

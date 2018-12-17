@@ -9,10 +9,12 @@ table.dataTable {
         outline-offset: 0;
     }
 
+    $datatables-cell-padding: calc(#{map-get($spacers, 4)} - 1px);
+
     thead{
         //padding
         th{
-            padding: calc(#{map-get($spacers, 4)} - 1px);
+            padding: $datatables-cell-padding;
             border-bottom: inherit;
         }
 
@@ -68,12 +70,12 @@ table.dataTable {
 
     tbody{
         td, th{
-            padding: calc(#{map-get($spacers, 4)} - 1px);
+            padding: $datatables-cell-padding;
         }
 
         //Expanded row
         tr.child{
-            padding: calc(#{map-get($spacers, 4)} - 1px); 
+            padding: $datatables-cell-padding; 
             td:first-child{
                 box-shadow: inset 2px 0 0 0 #454545;
             }
@@ -89,9 +91,9 @@ table.dataTable {
 
         //Selected row
         tr.selected-row{
-            background-color: $color-gray-light !important;
+            background-color: $color-gray-mediumpale !important;
             & + tr.child{ //child row (the expanded row) should have same color as parent. 
-                background-color: $color-gray-light !important;
+                background-color: $color-gray-mediumpale !important;
             }
         }
         //Expanded row inner content

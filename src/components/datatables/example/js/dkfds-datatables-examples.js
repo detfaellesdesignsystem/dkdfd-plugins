@@ -92,7 +92,7 @@ class datatablesExamples {
             render: function ( data, type, full, meta ) {
                 var checkboxid = "checkbox-"+ Math.random().toString(36).substring(7); 
                 return "<div class='form-group'>"+
-                            "<input id='"+checkboxid+"' type='checkbox' name='checked'>"+
+                            "<input id='"+checkboxid+"' type='checkbox' name='checked' class='form-checkbox'>"+
                             "<label for='"+checkboxid+"' ></label>" +
                         "</div>"
             }
