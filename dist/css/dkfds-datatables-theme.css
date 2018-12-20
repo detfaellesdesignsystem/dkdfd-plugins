@@ -11,7 +11,7 @@
 }
 
 table.dataTable th:focus, table.dataTable td:focus {
-  outline: 4px solid #febb30;
+  outline: 4px solid #747474;
   outline-offset: 0;
 }
 
