@@ -41,29 +41,34 @@ table.dataTable {
         }
         .sorting {
             &:after {
-                //background-image: url('#{$icons-folder-path}/sort-none.svg');  //sort_both
+                //sort_both
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h24v24H0z'/%3E%3Cg stroke='%231A1A1A'%3E%3Cpath d='M7.207 13.5L12 18.293l4.793-4.793H7.207zM16.793 10.5L12 5.707 7.207 10.5h9.586z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E%0A");
                 opacity: .75;
             }
         }
         .sorting_asc {
             &:after {
-                //background-image: url('#{$icons-folder-path}/sort-acending.svg'); //sort_asc
+                //sort_asc
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h24v24H0z'/%3E%3Cpath fill='%231A1A1A' d='M6 13l6 6 6-6z'/%3E%3Cpath stroke='%231A1A1A' d='M16.793 10.5L12 5.707 7.207 10.5h9.586z'/%3E%3C/g%3E%3C/svg%3E%0A");
             }
-            //background-image: url('../images/.png');
+            background-image: none; // override default sorting icon
         }
         .sorting_desc {
             &:after {
-                //background-image: url('#{$icons-folder-path}/sort-descending.svg'); //sort_desc
+                //sort_desc
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h24v24H0z'/%3E%3Cpath stroke='%231A1A1A' d='M7.207 13.5L12 18.293l4.793-4.793H7.207z'/%3E%3Cpath fill='%231A1A1A' d='M18 11l-6-6-6 6z'/%3E%3C/g%3E%3C/svg%3E%0A");
             }
         }
         .sorting_asc_disabled {
             &:after {
-                //background-image: url('#{$icons-folder-path}/sort-acending.svg'); //sort_asc -> disabled
+              //sort_asc -> disabled
+              background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h24v24H0z'/%3E%3Cpath fill='%231A1A1A' d='M6 13l6 6 6-6z'/%3E%3Cpath stroke='%231A1A1A' d='M16.793 10.5L12 5.707 7.207 10.5h9.586z'/%3E%3C/g%3E%3C/svg%3E%0A");
             }
         }
         .sorting_desc_disabled {
             &:after {
-                //background-image: url('#{$icons-folder-path}/sort-descending.svg'); //sort_desc -> disabled
+                //sort_desc -> disabled
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M0 0h24v24H0z'/%3E%3Cpath stroke='%231A1A1A' d='M7.207 13.5L12 18.293l4.793-4.793H7.207z'/%3E%3Cpath fill='%231A1A1A' d='M18 11l-6-6-6 6z'/%3E%3C/g%3E%3C/svg%3E%0A");
             }
         }
     }
@@ -148,7 +153,7 @@ table.dataTable {
     //Responsive collapsed (plus icon)
     &.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child, &.dtr-inline.collapsed>tbody>tr[role="row"]>th:first-child{
         &:before{
-            //background-image: url('#{$icons-folder-path}/plus.svg');
+            background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z' /%3E%3C/svg%3E");
             height: 24px;
             width: 24px;
             background-color: transparent;
@@ -165,7 +170,7 @@ table.dataTable {
             box-shadow: inset 2px 0 0 0 #454545;
         }
         &:before{
-            //background-image: url('#{$icons-folder-path}/minus.svg') !important;
+            background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M19,13H5V11H19V13Z' /%3E%3C/svg%3E") !important;
         }
     }
 

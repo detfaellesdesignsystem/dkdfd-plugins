@@ -25,817 +25,6 @@ module.exports = function forEach(ary, callback, thisArg) {
 },{}],2:[function(require,module,exports){
 'use strict';
 
-// element-closest | CC0-1.0 | github.com/jonathantneal/closest
-
-(function (ElementProto) {
-	if (typeof ElementProto.matches !== 'function') {
-		ElementProto.matches = ElementProto.msMatchesSelector || ElementProto.mozMatchesSelector || ElementProto.webkitMatchesSelector || function matches(selector) {
-			var element = this;
-			var elements = (element.document || element.ownerDocument).querySelectorAll(selector);
-			var index = 0;
-
-			while (elements[index] && elements[index] !== element) {
-				++index;
-			}
-
-			return Boolean(elements[index]);
-		};
-	}
-
-	if (typeof ElementProto.closest !== 'function') {
-		ElementProto.closest = function closest(selector) {
-			var element = this;
-
-			while (element && element.nodeType === 1) {
-				if (element.matches(selector)) {
-					return element;
-				}
-
-				element = element.parentNode;
-			}
-
-			return null;
-		};
-	}
-})(window.Element.prototype);
-
-},{}],3:[function(require,module,exports){
-/*
-object-assign
-(c) Sindre Sorhus
-@license MIT
-*/
-
-'use strict';
-/* eslint-disable no-unused-vars */
-
-var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-var hasOwnProperty = Object.prototype.hasOwnProperty;
-var propIsEnumerable = Object.prototype.propertyIsEnumerable;
-
-function toObject(val) {
-	if (val === null || val === undefined) {
-		throw new TypeError('Object.assign cannot be called with null or undefined');
-	}
-
-	return Object(val);
-}
-
-function shouldUseNative() {
-	try {
-		if (!Object.assign) {
-			return false;
-		}
-
-		// Detect buggy property enumeration order in older V8 versions.
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-		var test1 = new String('abc'); // eslint-disable-line no-new-wrappers
-		test1[5] = 'de';
-		if (Object.getOwnPropertyNames(test1)[0] === '5') {
-			return false;
-		}
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-		var test2 = {};
-		for (var i = 0; i < 10; i++) {
-			test2['_' + String.fromCharCode(i)] = i;
-		}
-		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
-			return test2[n];
-		});
-		if (order2.join('') !== '0123456789') {
-			return false;
-		}
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-		var test3 = {};
-		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
-			test3[letter] = letter;
-		});
-		if (Object.keys(Object.assign({}, test3)).join('') !== 'abcdefghijklmnopqrst') {
-			return false;
-		}
-
-		return true;
-	} catch (err) {
-		// We don't expect any of the above to throw, but better to be safe.
-		return false;
-	}
-}
-
-module.exports = shouldUseNative() ? Object.assign : function (target, source) {
-	var from;
-	var to = toObject(target);
-	var symbols;
-
-	for (var s = 1; s < arguments.length; s++) {
-		from = Object(arguments[s]);
-
-		for (var key in from) {
-			if (hasOwnProperty.call(from, key)) {
-				to[key] = from[key];
-			}
-		}
-
-		if (getOwnPropertySymbols) {
-			symbols = getOwnPropertySymbols(from);
-			for (var i = 0; i < symbols.length; i++) {
-				if (propIsEnumerable.call(from, symbols[i])) {
-					to[symbols[i]] = from[symbols[i]];
-				}
-			}
-		}
-	}
-
-	return to;
-};
-
-},{}],4:[function(require,module,exports){
-'use strict';
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var assign = require('object-assign');
-var delegate = require('../delegate');
-var delegateAll = require('../delegateAll');
-
-var DELEGATE_PATTERN = /^(.+):delegate\((.+)\)$/;
-var SPACE = ' ';
-
-var getListeners = function getListeners(type, handler) {
-  var match = type.match(DELEGATE_PATTERN);
-  var selector;
-  if (match) {
-    type = match[1];
-    selector = match[2];
-  }
-
-  var options;
-  if ((typeof handler === 'undefined' ? 'undefined' : _typeof(handler)) === 'object') {
-    options = {
-      capture: popKey(handler, 'capture'),
-      passive: popKey(handler, 'passive')
-    };
-  }
-
-  var listener = {
-    selector: selector,
-    delegate: (typeof handler === 'undefined' ? 'undefined' : _typeof(handler)) === 'object' ? delegateAll(handler) : selector ? delegate(selector, handler) : handler,
-    options: options
-  };
-
-  if (type.indexOf(SPACE) > -1) {
-    return type.split(SPACE).map(function (_type) {
-      return assign({ type: _type }, listener);
-    });
-  } else {
-    listener.type = type;
-    return [listener];
-  }
-};
-
-var popKey = function popKey(obj, key) {
-  var value = obj[key];
-  delete obj[key];
-  return value;
-};
-
-module.exports = function behavior(events, props) {
-  var listeners = Object.keys(events).reduce(function (memo, type) {
-    var listeners = getListeners(type, events[type]);
-    return memo.concat(listeners);
-  }, []);
-
-  return assign({
-    add: function addBehavior(element) {
-      listeners.forEach(function (listener) {
-        element.addEventListener(listener.type, listener.delegate, listener.options);
-      });
-    },
-    remove: function removeBehavior(element) {
-      listeners.forEach(function (listener) {
-        element.removeEventListener(listener.type, listener.delegate, listener.options);
-      });
-    }
-  }, props);
-};
-
-},{"../delegate":7,"../delegateAll":6,"object-assign":3}],5:[function(require,module,exports){
-"use strict";
-
-module.exports = function compose(functions) {
-  return function (e) {
-    return functions.some(function (fn) {
-      return fn.call(this, e) === false;
-    }, this);
-  };
-};
-
-},{}],6:[function(require,module,exports){
-'use strict';
-
-var delegate = require('../delegate');
-var compose = require('../compose');
-
-var SPLAT = '*';
-
-module.exports = function delegateAll(selectors) {
-  var keys = Object.keys(selectors);
-
-  // XXX optimization: if there is only one handler and it applies to
-  // all elements (the "*" CSS selector), then just return that
-  // handler
-  if (keys.length === 1 && keys[0] === SPLAT) {
-    return selectors[SPLAT];
-  }
-
-  var delegates = keys.reduce(function (memo, selector) {
-    memo.push(delegate(selector, selectors[selector]));
-    return memo;
-  }, []);
-  return compose(delegates);
-};
-
-},{"../compose":5,"../delegate":7}],7:[function(require,module,exports){
-'use strict';
-
-// polyfill Element.prototype.closest
-require('element-closest');
-
-module.exports = function delegate(selector, fn) {
-  return function delegation(event) {
-    var target = event.target.closest(selector);
-    if (target) {
-      return fn.call(target, event);
-    }
-  };
-};
-
-},{"element-closest":2}],8:[function(require,module,exports){
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var behavior = require('../utils/behavior');
-var select = require('../utils/select');
-var closest = require('../utils/closest');
-var forEach = require('array-foreach');
-
-var dropdown = function () {
-    function dropdown(el) {
-        _classCallCheck(this, dropdown);
-
-        this.jsDropdownTrigger = ".js-dropdown";
-        this.jsDropdownTarget = "data-js-target";
-
-        //option: make dropdown behave as the collapse component when on small screens (used by submenus in the header and step-dropdown). 
-        this.navResponsiveBreakpoint = 992; //same as $nav-responsive-breakpoint from the scss.
-        this.jsResponsiveCollapseModifier = ".js-dropdown--responsive-collapse";
-        this.responsiveCollapseEnabled = false;
-
-        this.triggerEl = null;
-        this.targetEl = null;
-
-        this.init(el);
-
-        if (this.triggerEl !== null && this.triggerEl !== undefined && this.targetEl !== null && this.targetEl !== undefined) {
-            var that = this;
-
-            //Clicked outside dropdown -> close it
-            select('body')[0].addEventListener("click", function (event) {
-                that.outsideClose(event);
-            });
-
-            //Clicked on dropdown open button --> toggle it
-            this.triggerEl.addEventListener("click", function (event) {
-                event.preventDefault();
-                event.stopPropagation(); //prevents ouside click listener from triggering. 
-                that.toggleDropdown();
-            });
-        }
-    }
-
-    _createClass(dropdown, [{
-        key: 'init',
-        value: function init(el) {
-            this.triggerEl = el;
-            if (this.triggerEl !== null && this.triggerEl !== undefined) {
-                var targetAttr = this.triggerEl.getAttribute(this.jsDropdownTarget);
-                if (targetAttr !== null && targetAttr !== undefined) {
-                    var targetEl = select(targetAttr, 'body');
-                    if (targetEl !== null && targetEl !== undefined && targetEl.length > 0) {
-                        this.targetEl = targetEl[0];
-                    }
-                }
-            }
-
-            if (this.triggerEl.classList.contains('js-dropdown--responsive-collapse')) {
-                this.responsiveCollapseEnabled = true;
-            }
-        }
-    }, {
-        key: 'toggleDropdown',
-        value: function toggleDropdown(forceClose) {
-            if (this.triggerEl !== null && this.triggerEl !== undefined && this.targetEl !== null && this.targetEl !== undefined) {
-                //change state
-                if (this.triggerEl.getAttribute("aria-expanded") == "true" || forceClose) {
-                    //close
-                    this.triggerEl.setAttribute("aria-expanded", "false");
-                    this.targetEl.classList.add("collapsed");
-                    this.targetEl.setAttribute("aria-hidden", "true");
-                } else {
-                    //open
-                    this.triggerEl.setAttribute("aria-expanded", "true");
-                    this.targetEl.classList.remove("collapsed");
-                    this.targetEl.setAttribute("aria-hidden", "false");
-                }
-            }
-        }
-    }, {
-        key: 'outsideClose',
-        value: function outsideClose(event) {
-            if (!this.doResponsiveCollapse()) {
-                //closes dropdown when clicked outside. 
-                var dropdownElm = closest(event.target, this.targetEl.id);
-                if ((dropdownElm === null || dropdownElm === undefined) && event.target !== this.triggerEl) {
-                    //clicked outside trigger, force close
-                    this.toggleDropdown(true);
-                }
-            }
-        }
-    }, {
-        key: 'doResponsiveCollapse',
-        value: function doResponsiveCollapse() {
-            //returns true if responsive collapse is enabled and we are on a small screen. 
-            if (this.responsiveCollapseEnabled && window.innerWidth <= this.navResponsiveBreakpoint) {
-                return true;
-            }
-            return false;
-        }
-    }]);
-
-    return dropdown;
-}();
-
-module.exports = dropdown;
-
-},{"../utils/behavior":9,"../utils/closest":10,"../utils/select":11,"array-foreach":1}],9:[function(require,module,exports){
-'use strict';
-
-var assign = require('object-assign');
-var forEach = require('array-foreach');
-var Behavior = require('receptor/behavior');
-
-var sequence = function sequence() {
-  var seq = [].slice.call(arguments);
-  return function (target) {
-    var _this = this;
-
-    if (!target) {
-      target = document.body;
-    }
-    forEach(seq, function (method) {
-      if (typeof _this[method] === 'function') {
-        _this[method].call(_this, target);
-      }
-    });
-  };
-};
-
-/**
- * @name behavior
- * @param {object} events
- * @param {object?} props
- * @return {receptor.behavior}
- */
-module.exports = function (events, props) {
-  return Behavior(events, assign({
-    on: sequence('init', 'add'),
-    off: sequence('teardown', 'remove')
-  }, props));
-};
-
-},{"array-foreach":1,"object-assign":3,"receptor/behavior":4}],10:[function(require,module,exports){
-'use strict';
-
-/**
- * @name closest
- * @desc get nearest parent element matching selector.
- * @param {HTMLElement} el - The HTML element where the search starts.
- * @param {string} selector - Selector to be found.
- * @return {HTMLElement} - Nearest parent element matching selector.
- */
-
-module.exports = function closest(el, selector) {
-    var matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
-
-    while (el) {
-        if (matchesSelector.call(el, selector)) {
-            break;
-        }
-        el = el.parentElement;
-    }
-    return el;
-};
-
-},{}],11:[function(require,module,exports){
-'use strict';
-
-/**
- * @name isElement
- * @desc returns whether or not the given argument is a DOM element.
- * @param {any} value
- * @return {boolean}
- */
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var isElement = function isElement(value) {
-  return value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.nodeType === 1;
-};
-
-/**
- * @name select
- * @desc selects elements from the DOM by class selector or ID selector.
- * @param {string} selector - The selector to traverse the DOM with.
- * @param {Document|HTMLElement?} context - The context to traverse the DOM
- *   in. If not provided, it defaults to the document.
- * @return {HTMLElement[]} - An array of DOM nodes or an empty array.
- */
-module.exports = function select(selector, context) {
-
-  if (typeof selector !== 'string') {
-    return [];
-  }
-
-  if (!context || !isElement(context)) {
-    context = window.document;
-  }
-
-  var selection = context.querySelectorAll(selector);
-  return Array.prototype.slice.call(selection);
-};
-
-},{}],12:[function(require,module,exports){
-'use strict';
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-(function (global, factory) {
-  (typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? module.exports = factory() : typeof define === 'function' && define.amd ? define(factory) : global.MicroModal = factory();
-})(undefined, function () {
-  'use strict';
-
-  var version = "0.3.1";
-
-  var classCallCheck = function classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  };
-
-  var createClass = function () {
-    function defineProperties(target, props) {
-      for (var i = 0; i < props.length; i++) {
-        var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor) descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor);
-      }
-    }
-
-    return function (Constructor, protoProps, staticProps) {
-      if (protoProps) defineProperties(Constructor.prototype, protoProps);
-      if (staticProps) defineProperties(Constructor, staticProps);
-      return Constructor;
-    };
-  }();
-
-  var toConsumableArray = function toConsumableArray(arr) {
-    if (Array.isArray(arr)) {
-      for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
-        arr2[i] = arr[i];
-      }return arr2;
-    } else {
-      return Array.from(arr);
-    }
-  };
-
-  var MicroModal = function () {
-
-    var FOCUSABLE_ELEMENTS = ['a[href]', 'area[href]', 'input:not([disabled]):not([type="hidden"]):not([aria-hidden])', 'select:not([disabled]):not([aria-hidden])', 'textarea:not([disabled]):not([aria-hidden])', 'button:not([disabled]):not([aria-hidden])', 'iframe', 'object', 'embed', '[contenteditable]', '[tabindex]:not([tabindex^="-"])'];
-
-    var Modal = function () {
-      function Modal(_ref) {
-        var targetModal = _ref.targetModal,
-            _ref$triggers = _ref.triggers,
-            triggers = _ref$triggers === undefined ? [] : _ref$triggers,
-            _ref$onShow = _ref.onShow,
-            onShow = _ref$onShow === undefined ? function () {} : _ref$onShow,
-            _ref$onClose = _ref.onClose,
-            onClose = _ref$onClose === undefined ? function () {} : _ref$onClose,
-            _ref$openTrigger = _ref.openTrigger,
-            openTrigger = _ref$openTrigger === undefined ? 'data-micromodal-trigger' : _ref$openTrigger,
-            _ref$closeTrigger = _ref.closeTrigger,
-            closeTrigger = _ref$closeTrigger === undefined ? 'data-micromodal-close' : _ref$closeTrigger,
-            _ref$disableScroll = _ref.disableScroll,
-            disableScroll = _ref$disableScroll === undefined ? false : _ref$disableScroll,
-            _ref$disableFocus = _ref.disableFocus,
-            disableFocus = _ref$disableFocus === undefined ? false : _ref$disableFocus,
-            _ref$awaitCloseAnimat = _ref.awaitCloseAnimation,
-            awaitCloseAnimation = _ref$awaitCloseAnimat === undefined ? false : _ref$awaitCloseAnimat,
-            _ref$debugMode = _ref.debugMode,
-            debugMode = _ref$debugMode === undefined ? false : _ref$debugMode;
-        classCallCheck(this, Modal);
-
-        // Save a reference of the modal
-        this.modal = document.getElementById(targetModal);
-
-        // Save a reference to the passed config
-        this.config = { debugMode: debugMode, disableScroll: disableScroll, openTrigger: openTrigger, closeTrigger: closeTrigger, onShow: onShow, onClose: onClose, awaitCloseAnimation: awaitCloseAnimation, disableFocus: disableFocus
-
-          // Register click events only if prebinding eventListeners
-        };if (triggers.length > 0) this.registerTriggers.apply(this, toConsumableArray(triggers));
-
-        // prebind functions for event listeners
-        this.onClick = this.onClick.bind(this);
-        this.onKeydown = this.onKeydown.bind(this);
-      }
-
-      /**
-       * Loops through all openTriggers and binds click event
-       * @param  {array} triggers [Array of node elements]
-       * @return {void}
-       */
-
-      createClass(Modal, [{
-        key: 'registerTriggers',
-        value: function registerTriggers() {
-          var _this = this;
-
-          for (var _len = arguments.length, triggers = Array(_len), _key = 0; _key < _len; _key++) {
-            triggers[_key] = arguments[_key];
-          }
-
-          triggers.forEach(function (trigger) {
-            trigger.addEventListener('click', function () {
-              return _this.showModal();
-            });
-          });
-        }
-      }, {
-        key: 'showModal',
-        value: function showModal() {
-          this.activeElement = document.activeElement;
-          this.modal.setAttribute('aria-hidden', 'false');
-          this.modal.classList.add('is-open');
-          this.setFocusToFirstNode();
-          this.scrollBehaviour('disable');
-          this.addEventListeners();
-          this.config.onShow(this.modal);
-        }
-      }, {
-        key: 'closeModal',
-        value: function closeModal() {
-          var modal = this.modal;
-          this.modal.setAttribute('aria-hidden', 'true');
-          this.removeEventListeners();
-          this.scrollBehaviour('enable');
-          this.activeElement.focus();
-          this.config.onClose(this.modal);
-
-          if (this.config.awaitCloseAnimation) {
-            this.modal.addEventListener('animationend', function handler() {
-              modal.classList.remove('is-open');
-              modal.removeEventListener('animationend', handler, false);
-            }, false);
-          } else {
-            modal.classList.remove('is-open');
-          }
-        }
-      }, {
-        key: 'scrollBehaviour',
-        value: function scrollBehaviour(toggle) {
-          if (!this.config.disableScroll) return;
-          var body = document.querySelector('body');
-          switch (toggle) {
-            case 'enable':
-              Object.assign(body.style, { overflow: 'initial', height: 'initial' });
-              break;
-            case 'disable':
-              Object.assign(body.style, { overflow: 'hidden', height: '100vh' });
-              break;
-            default:
-          }
-        }
-      }, {
-        key: 'addEventListeners',
-        value: function addEventListeners() {
-          this.modal.addEventListener('touchstart', this.onClick);
-          this.modal.addEventListener('click', this.onClick);
-          document.addEventListener('keydown', this.onKeydown);
-        }
-      }, {
-        key: 'removeEventListeners',
-        value: function removeEventListeners() {
-          this.modal.removeEventListener('touchstart', this.onClick);
-          this.modal.removeEventListener('click', this.onClick);
-          document.removeEventListener('keydown', this.onKeydown);
-        }
-      }, {
-        key: 'onClick',
-        value: function onClick(event) {
-          if (event.target.hasAttribute(this.config.closeTrigger)) {
-            this.closeModal();
-            event.preventDefault();
-          }
-        }
-      }, {
-        key: 'onKeydown',
-        value: function onKeydown(event) {
-          if (event.keyCode === 27) this.closeModal(event);
-          if (event.keyCode === 9) this.maintainFocus(event);
-        }
-      }, {
-        key: 'getFocusableNodes',
-        value: function getFocusableNodes() {
-          var nodes = this.modal.querySelectorAll(FOCUSABLE_ELEMENTS);
-          return Object.keys(nodes).map(function (key) {
-            return nodes[key];
-          });
-        }
-      }, {
-        key: 'setFocusToFirstNode',
-        value: function setFocusToFirstNode() {
-          if (this.config.disableFocus) return;
-          var focusableNodes = this.getFocusableNodes();
-          if (focusableNodes.length) focusableNodes[0].focus();
-        }
-      }, {
-        key: 'maintainFocus',
-        value: function maintainFocus(event) {
-          var focusableNodes = this.getFocusableNodes();
-
-          // if disableFocus is true
-          if (!this.modal.contains(document.activeElement)) {
-            focusableNodes[0].focus();
-          } else {
-            var focusedItemIndex = focusableNodes.indexOf(document.activeElement);
-
-            if (event.shiftKey && focusedItemIndex === 0) {
-              focusableNodes[focusableNodes.length - 1].focus();
-              event.preventDefault();
-            }
-
-            if (!event.shiftKey && focusedItemIndex === focusableNodes.length - 1) {
-              focusableNodes[0].focus();
-              event.preventDefault();
-            }
-          }
-        }
-      }]);
-      return Modal;
-    }();
-
-    /**
-     * Modal prototype ends.
-     * Here on code is reposible for detecting and
-     * autobinding event handlers on modal triggers
-     */
-
-    // Keep a reference to the opened modal
-
-
-    var activeModal = null;
-
-    /**
-     * Generates an associative array of modals and it's
-     * respective triggers
-     * @param  {array} triggers     An array of all triggers
-     * @param  {string} triggerAttr The data-attribute which triggers the module
-     * @return {array}
-     */
-    var generateTriggerMap = function generateTriggerMap(triggers, triggerAttr) {
-      var triggerMap = [];
-
-      triggers.forEach(function (trigger) {
-        var targetModal = trigger.attributes[triggerAttr].value;
-        if (triggerMap[targetModal] === undefined) triggerMap[targetModal] = [];
-        triggerMap[targetModal].push(trigger);
-      });
-
-      return triggerMap;
-    };
-
-    /**
-     * Validates whether a modal of the given id exists
-     * in the DOM
-     * @param  {number} id  The id of the modal
-     * @return {boolean}
-     */
-    var validateModalPresence = function validateModalPresence(id) {
-      if (!document.getElementById(id)) {
-        console.warn('MicroModal v' + version + ': \u2757Seems like you have missed %c\'' + id + '\'', 'background-color: #f8f9fa;color: #50596c;font-weight: bold;', 'ID somewhere in your code. Refer example below to resolve it.');
-        console.warn('%cExample:', 'background-color: #f8f9fa;color: #50596c;font-weight: bold;', '<div class="modal" id="' + id + '"></div>');
-        return false;
-      }
-    };
-
-    /**
-     * Validates if there are modal triggers present
-     * in the DOM
-     * @param  {array} triggers An array of data-triggers
-     * @return {boolean}
-     */
-    var validateTriggerPresence = function validateTriggerPresence(triggers) {
-      if (triggers.length <= 0) {
-        console.warn('MicroModal v' + version + ': \u2757Please specify at least one %c\'micromodal-trigger\'', 'background-color: #f8f9fa;color: #50596c;font-weight: bold;', 'data attribute.');
-        console.warn('%cExample:', 'background-color: #f8f9fa;color: #50596c;font-weight: bold;', '<a href="#" data-micromodal-trigger="my-modal"></a>');
-        return false;
-      }
-    };
-
-    /**
-     * Checks if triggers and their corresponding modals
-     * are present in the DOM
-     * @param  {array} triggers   Array of DOM nodes which have data-triggers
-     * @param  {array} triggerMap Associative array of modals and thier triggers
-     * @return {boolean}
-     */
-    var validateArgs = function validateArgs(triggers, triggerMap) {
-      validateTriggerPresence(triggers);
-      if (!triggerMap) return true;
-      for (var id in triggerMap) {
-        validateModalPresence(id);
-      }return true;
-    };
-
-    /**
-     * Binds click handlers to all modal triggers
-     * @param  {object} config [description]
-     * @return void
-     */
-    var init = function init(config) {
-      // Create an config object with default openTrigger
-      var options = Object.assign({}, { openTrigger: 'data-micromodal-trigger' }, config);
-
-      // Collects all the nodes with the trigger
-      var triggers = [].concat(toConsumableArray(document.querySelectorAll('[' + options.openTrigger + ']')));
-
-      // Makes a mappings of modals with their trigger nodes
-      var triggerMap = generateTriggerMap(triggers, options.openTrigger);
-
-      // Checks if modals and triggers exist in dom
-      if (options.debugMode === true && validateArgs(triggers, triggerMap) === false) return;
-
-      // For every target modal creates a new instance
-      for (var key in triggerMap) {
-        var value = triggerMap[key];
-        options.targetModal = key;
-        options.triggers = [].concat(toConsumableArray(value));
-        new Modal(options); // eslint-disable-line no-new
-      }
-    };
-
-    /**
-     * Shows a particular modal
-     * @param  {string} targetModal [The id of the modal to display]
-     * @param  {object} config [The configuration object to pass]
-     * @return {void}
-     */
-    var show = function show(targetModal, config) {
-      var options = config || {};
-      options.targetModal = targetModal;
-
-      // Checks if modals and triggers exist in dom
-      if (options.debugMode === true && validateModalPresence(targetModal) === false) return;
-
-      // stores reference to active modal
-      activeModal = new Modal(options); // eslint-disable-line no-new
-      activeModal.showModal();
-    };
-
-    /**
-     * Closes the active modal
-     * @return {void}
-     */
-    var close = function close() {
-      activeModal.closeModal();
-    };
-
-    return { init: init, show: show, close: close };
-  }();
-
-  return MicroModal;
-});
-
-},{}],13:[function(require,module,exports){
-'use strict';
-
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 /*! Responsive 2.2.3
@@ -2096,7 +1285,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 	return Responsive;
 });
 
-},{"datatables.net":15}],14:[function(require,module,exports){
+},{"datatables.net":4}],3:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -3206,7 +2395,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 	return DataTable.select;
 });
 
-},{"datatables.net":15}],15:[function(require,module,exports){
+},{"datatables.net":4}],4:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -17153,7 +16342,605 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 	return $.fn.dataTable;
 });
 
-},{"jquery":16}],16:[function(require,module,exports){
+},{"jquery":11}],5:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var behavior = require('../utils/behavior');
+var select = require('../utils/select');
+var closest = require('../utils/closest');
+var forEach = require('array-foreach');
+
+var dropdown = function () {
+    function dropdown(el) {
+        _classCallCheck(this, dropdown);
+
+        this.jsDropdownTrigger = ".js-dropdown";
+        this.jsDropdownTarget = "data-js-target";
+
+        //option: make dropdown behave as the collapse component when on small screens (used by submenus in the header and step-dropdown). 
+        this.navResponsiveBreakpoint = 992; //same as $nav-responsive-breakpoint from the scss.
+        this.jsResponsiveCollapseModifier = ".js-dropdown--responsive-collapse";
+        this.responsiveCollapseEnabled = false;
+
+        this.triggerEl = null;
+        this.targetEl = null;
+
+        this.init(el);
+
+        if (this.triggerEl !== null && this.triggerEl !== undefined && this.targetEl !== null && this.targetEl !== undefined) {
+            var that = this;
+
+            //Clicked outside dropdown -> close it
+            select('body')[0].addEventListener("click", function (event) {
+                that.outsideClose(event);
+            });
+
+            //Clicked on dropdown open button --> toggle it
+            this.triggerEl.addEventListener("click", function (event) {
+                event.preventDefault();
+                event.stopPropagation(); //prevents ouside click listener from triggering. 
+                that.toggleDropdown();
+            });
+        }
+    }
+
+    _createClass(dropdown, [{
+        key: 'init',
+        value: function init(el) {
+            this.triggerEl = el;
+            if (this.triggerEl !== null && this.triggerEl !== undefined) {
+                var targetAttr = this.triggerEl.getAttribute(this.jsDropdownTarget);
+                if (targetAttr !== null && targetAttr !== undefined) {
+                    var targetEl = select(targetAttr, 'body');
+                    if (targetEl !== null && targetEl !== undefined && targetEl.length > 0) {
+                        this.targetEl = targetEl[0];
+                    }
+                }
+            }
+
+            if (this.triggerEl.classList.contains('js-dropdown--responsive-collapse')) {
+                this.responsiveCollapseEnabled = true;
+            }
+        }
+    }, {
+        key: 'toggleDropdown',
+        value: function toggleDropdown(forceClose) {
+            if (this.triggerEl !== null && this.triggerEl !== undefined && this.targetEl !== null && this.targetEl !== undefined) {
+                //change state
+                if (this.triggerEl.getAttribute("aria-expanded") == "true" || forceClose) {
+                    //close
+                    this.triggerEl.setAttribute("aria-expanded", "false");
+                    this.targetEl.classList.add("collapsed");
+                    this.targetEl.setAttribute("aria-hidden", "true");
+                } else {
+                    //open
+                    this.triggerEl.setAttribute("aria-expanded", "true");
+                    this.targetEl.classList.remove("collapsed");
+                    this.targetEl.setAttribute("aria-hidden", "false");
+                }
+            }
+        }
+    }, {
+        key: 'outsideClose',
+        value: function outsideClose(event) {
+            if (!this.doResponsiveCollapse()) {
+                //closes dropdown when clicked outside. 
+                var dropdownElm = closest(event.target, this.targetEl.id);
+                if ((dropdownElm === null || dropdownElm === undefined) && event.target !== this.triggerEl) {
+                    //clicked outside trigger, force close
+                    this.toggleDropdown(true);
+                }
+            }
+        }
+    }, {
+        key: 'doResponsiveCollapse',
+        value: function doResponsiveCollapse() {
+            //returns true if responsive collapse is enabled and we are on a small screen. 
+            if (this.responsiveCollapseEnabled && window.innerWidth <= this.navResponsiveBreakpoint) {
+                return true;
+            }
+            return false;
+        }
+    }]);
+
+    return dropdown;
+}();
+
+module.exports = dropdown;
+
+},{"../utils/behavior":6,"../utils/closest":7,"../utils/select":8,"array-foreach":1}],6:[function(require,module,exports){
+'use strict';
+
+var assign = require('object-assign');
+var forEach = require('array-foreach');
+var Behavior = require('receptor/behavior');
+
+var sequence = function sequence() {
+  var seq = [].slice.call(arguments);
+  return function (target) {
+    var _this = this;
+
+    if (!target) {
+      target = document.body;
+    }
+    forEach(seq, function (method) {
+      if (typeof _this[method] === 'function') {
+        _this[method].call(_this, target);
+      }
+    });
+  };
+};
+
+/**
+ * @name behavior
+ * @param {object} events
+ * @param {object?} props
+ * @return {receptor.behavior}
+ */
+module.exports = function (events, props) {
+  return Behavior(events, assign({
+    on: sequence('init', 'add'),
+    off: sequence('teardown', 'remove')
+  }, props));
+};
+
+},{"array-foreach":1,"object-assign":12,"receptor/behavior":13}],7:[function(require,module,exports){
+'use strict';
+
+/**
+ * @name closest
+ * @desc get nearest parent element matching selector.
+ * @param {HTMLElement} el - The HTML element where the search starts.
+ * @param {string} selector - Selector to be found.
+ * @return {HTMLElement} - Nearest parent element matching selector.
+ */
+
+module.exports = function closest(el, selector) {
+    var matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
+
+    while (el) {
+        if (matchesSelector.call(el, selector)) {
+            break;
+        }
+        el = el.parentElement;
+    }
+    return el;
+};
+
+},{}],8:[function(require,module,exports){
+'use strict';
+
+/**
+ * @name isElement
+ * @desc returns whether or not the given argument is a DOM element.
+ * @param {any} value
+ * @return {boolean}
+ */
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var isElement = function isElement(value) {
+  return value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.nodeType === 1;
+};
+
+/**
+ * @name select
+ * @desc selects elements from the DOM by class selector or ID selector.
+ * @param {string} selector - The selector to traverse the DOM with.
+ * @param {Document|HTMLElement?} context - The context to traverse the DOM
+ *   in. If not provided, it defaults to the document.
+ * @return {HTMLElement[]} - An array of DOM nodes or an empty array.
+ */
+module.exports = function select(selector, context) {
+
+  if (typeof selector !== 'string') {
+    return [];
+  }
+
+  if (!context || !isElement(context)) {
+    context = window.document;
+  }
+
+  var selection = context.querySelectorAll(selector);
+  return Array.prototype.slice.call(selection);
+};
+
+},{}],9:[function(require,module,exports){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+(function (global, factory) {
+  (typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? module.exports = factory() : typeof define === 'function' && define.amd ? define(factory) : global.MicroModal = factory();
+})(undefined, function () {
+  'use strict';
+
+  var version = "0.3.1";
+
+  var classCallCheck = function classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  };
+
+  var createClass = function () {
+    function defineProperties(target, props) {
+      for (var i = 0; i < props.length; i++) {
+        var descriptor = props[i];
+        descriptor.enumerable = descriptor.enumerable || false;
+        descriptor.configurable = true;
+        if ("value" in descriptor) descriptor.writable = true;
+        Object.defineProperty(target, descriptor.key, descriptor);
+      }
+    }
+
+    return function (Constructor, protoProps, staticProps) {
+      if (protoProps) defineProperties(Constructor.prototype, protoProps);
+      if (staticProps) defineProperties(Constructor, staticProps);
+      return Constructor;
+    };
+  }();
+
+  var toConsumableArray = function toConsumableArray(arr) {
+    if (Array.isArray(arr)) {
+      for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+        arr2[i] = arr[i];
+      }return arr2;
+    } else {
+      return Array.from(arr);
+    }
+  };
+
+  var MicroModal = function () {
+
+    var FOCUSABLE_ELEMENTS = ['a[href]', 'area[href]', 'input:not([disabled]):not([type="hidden"]):not([aria-hidden])', 'select:not([disabled]):not([aria-hidden])', 'textarea:not([disabled]):not([aria-hidden])', 'button:not([disabled]):not([aria-hidden])', 'iframe', 'object', 'embed', '[contenteditable]', '[tabindex]:not([tabindex^="-"])'];
+
+    var Modal = function () {
+      function Modal(_ref) {
+        var targetModal = _ref.targetModal,
+            _ref$triggers = _ref.triggers,
+            triggers = _ref$triggers === undefined ? [] : _ref$triggers,
+            _ref$onShow = _ref.onShow,
+            onShow = _ref$onShow === undefined ? function () {} : _ref$onShow,
+            _ref$onClose = _ref.onClose,
+            onClose = _ref$onClose === undefined ? function () {} : _ref$onClose,
+            _ref$openTrigger = _ref.openTrigger,
+            openTrigger = _ref$openTrigger === undefined ? 'data-micromodal-trigger' : _ref$openTrigger,
+            _ref$closeTrigger = _ref.closeTrigger,
+            closeTrigger = _ref$closeTrigger === undefined ? 'data-micromodal-close' : _ref$closeTrigger,
+            _ref$disableScroll = _ref.disableScroll,
+            disableScroll = _ref$disableScroll === undefined ? false : _ref$disableScroll,
+            _ref$disableFocus = _ref.disableFocus,
+            disableFocus = _ref$disableFocus === undefined ? false : _ref$disableFocus,
+            _ref$awaitCloseAnimat = _ref.awaitCloseAnimation,
+            awaitCloseAnimation = _ref$awaitCloseAnimat === undefined ? false : _ref$awaitCloseAnimat,
+            _ref$debugMode = _ref.debugMode,
+            debugMode = _ref$debugMode === undefined ? false : _ref$debugMode;
+        classCallCheck(this, Modal);
+
+        // Save a reference of the modal
+        this.modal = document.getElementById(targetModal);
+
+        // Save a reference to the passed config
+        this.config = { debugMode: debugMode, disableScroll: disableScroll, openTrigger: openTrigger, closeTrigger: closeTrigger, onShow: onShow, onClose: onClose, awaitCloseAnimation: awaitCloseAnimation, disableFocus: disableFocus
+
+          // Register click events only if prebinding eventListeners
+        };if (triggers.length > 0) this.registerTriggers.apply(this, toConsumableArray(triggers));
+
+        // prebind functions for event listeners
+        this.onClick = this.onClick.bind(this);
+        this.onKeydown = this.onKeydown.bind(this);
+      }
+
+      /**
+       * Loops through all openTriggers and binds click event
+       * @param  {array} triggers [Array of node elements]
+       * @return {void}
+       */
+
+      createClass(Modal, [{
+        key: 'registerTriggers',
+        value: function registerTriggers() {
+          var _this = this;
+
+          for (var _len = arguments.length, triggers = Array(_len), _key = 0; _key < _len; _key++) {
+            triggers[_key] = arguments[_key];
+          }
+
+          triggers.forEach(function (trigger) {
+            trigger.addEventListener('click', function () {
+              return _this.showModal();
+            });
+          });
+        }
+      }, {
+        key: 'showModal',
+        value: function showModal() {
+          this.activeElement = document.activeElement;
+          this.modal.setAttribute('aria-hidden', 'false');
+          this.modal.classList.add('is-open');
+          this.setFocusToFirstNode();
+          this.scrollBehaviour('disable');
+          this.addEventListeners();
+          this.config.onShow(this.modal);
+        }
+      }, {
+        key: 'closeModal',
+        value: function closeModal() {
+          var modal = this.modal;
+          this.modal.setAttribute('aria-hidden', 'true');
+          this.removeEventListeners();
+          this.scrollBehaviour('enable');
+          this.activeElement.focus();
+          this.config.onClose(this.modal);
+
+          if (this.config.awaitCloseAnimation) {
+            this.modal.addEventListener('animationend', function handler() {
+              modal.classList.remove('is-open');
+              modal.removeEventListener('animationend', handler, false);
+            }, false);
+          } else {
+            modal.classList.remove('is-open');
+          }
+        }
+      }, {
+        key: 'scrollBehaviour',
+        value: function scrollBehaviour(toggle) {
+          if (!this.config.disableScroll) return;
+          var body = document.querySelector('body');
+          switch (toggle) {
+            case 'enable':
+              Object.assign(body.style, { overflow: 'initial', height: 'initial' });
+              break;
+            case 'disable':
+              Object.assign(body.style, { overflow: 'hidden', height: '100vh' });
+              break;
+            default:
+          }
+        }
+      }, {
+        key: 'addEventListeners',
+        value: function addEventListeners() {
+          this.modal.addEventListener('touchstart', this.onClick);
+          this.modal.addEventListener('click', this.onClick);
+          document.addEventListener('keydown', this.onKeydown);
+        }
+      }, {
+        key: 'removeEventListeners',
+        value: function removeEventListeners() {
+          this.modal.removeEventListener('touchstart', this.onClick);
+          this.modal.removeEventListener('click', this.onClick);
+          document.removeEventListener('keydown', this.onKeydown);
+        }
+      }, {
+        key: 'onClick',
+        value: function onClick(event) {
+          if (event.target.hasAttribute(this.config.closeTrigger)) {
+            this.closeModal();
+            event.preventDefault();
+          }
+        }
+      }, {
+        key: 'onKeydown',
+        value: function onKeydown(event) {
+          if (event.keyCode === 27) this.closeModal(event);
+          if (event.keyCode === 9) this.maintainFocus(event);
+        }
+      }, {
+        key: 'getFocusableNodes',
+        value: function getFocusableNodes() {
+          var nodes = this.modal.querySelectorAll(FOCUSABLE_ELEMENTS);
+          return Object.keys(nodes).map(function (key) {
+            return nodes[key];
+          });
+        }
+      }, {
+        key: 'setFocusToFirstNode',
+        value: function setFocusToFirstNode() {
+          if (this.config.disableFocus) return;
+          var focusableNodes = this.getFocusableNodes();
+          if (focusableNodes.length) focusableNodes[0].focus();
+        }
+      }, {
+        key: 'maintainFocus',
+        value: function maintainFocus(event) {
+          var focusableNodes = this.getFocusableNodes();
+
+          // if disableFocus is true
+          if (!this.modal.contains(document.activeElement)) {
+            focusableNodes[0].focus();
+          } else {
+            var focusedItemIndex = focusableNodes.indexOf(document.activeElement);
+
+            if (event.shiftKey && focusedItemIndex === 0) {
+              focusableNodes[focusableNodes.length - 1].focus();
+              event.preventDefault();
+            }
+
+            if (!event.shiftKey && focusedItemIndex === focusableNodes.length - 1) {
+              focusableNodes[0].focus();
+              event.preventDefault();
+            }
+          }
+        }
+      }]);
+      return Modal;
+    }();
+
+    /**
+     * Modal prototype ends.
+     * Here on code is reposible for detecting and
+     * autobinding event handlers on modal triggers
+     */
+
+    // Keep a reference to the opened modal
+
+
+    var activeModal = null;
+
+    /**
+     * Generates an associative array of modals and it's
+     * respective triggers
+     * @param  {array} triggers     An array of all triggers
+     * @param  {string} triggerAttr The data-attribute which triggers the module
+     * @return {array}
+     */
+    var generateTriggerMap = function generateTriggerMap(triggers, triggerAttr) {
+      var triggerMap = [];
+
+      triggers.forEach(function (trigger) {
+        var targetModal = trigger.attributes[triggerAttr].value;
+        if (triggerMap[targetModal] === undefined) triggerMap[targetModal] = [];
+        triggerMap[targetModal].push(trigger);
+      });
+
+      return triggerMap;
+    };
+
+    /**
+     * Validates whether a modal of the given id exists
+     * in the DOM
+     * @param  {number} id  The id of the modal
+     * @return {boolean}
+     */
+    var validateModalPresence = function validateModalPresence(id) {
+      if (!document.getElementById(id)) {
+        console.warn('MicroModal v' + version + ': \u2757Seems like you have missed %c\'' + id + '\'', 'background-color: #f8f9fa;color: #50596c;font-weight: bold;', 'ID somewhere in your code. Refer example below to resolve it.');
+        console.warn('%cExample:', 'background-color: #f8f9fa;color: #50596c;font-weight: bold;', '<div class="modal" id="' + id + '"></div>');
+        return false;
+      }
+    };
+
+    /**
+     * Validates if there are modal triggers present
+     * in the DOM
+     * @param  {array} triggers An array of data-triggers
+     * @return {boolean}
+     */
+    var validateTriggerPresence = function validateTriggerPresence(triggers) {
+      if (triggers.length <= 0) {
+        console.warn('MicroModal v' + version + ': \u2757Please specify at least one %c\'micromodal-trigger\'', 'background-color: #f8f9fa;color: #50596c;font-weight: bold;', 'data attribute.');
+        console.warn('%cExample:', 'background-color: #f8f9fa;color: #50596c;font-weight: bold;', '<a href="#" data-micromodal-trigger="my-modal"></a>');
+        return false;
+      }
+    };
+
+    /**
+     * Checks if triggers and their corresponding modals
+     * are present in the DOM
+     * @param  {array} triggers   Array of DOM nodes which have data-triggers
+     * @param  {array} triggerMap Associative array of modals and thier triggers
+     * @return {boolean}
+     */
+    var validateArgs = function validateArgs(triggers, triggerMap) {
+      validateTriggerPresence(triggers);
+      if (!triggerMap) return true;
+      for (var id in triggerMap) {
+        validateModalPresence(id);
+      }return true;
+    };
+
+    /**
+     * Binds click handlers to all modal triggers
+     * @param  {object} config [description]
+     * @return void
+     */
+    var init = function init(config) {
+      // Create an config object with default openTrigger
+      var options = Object.assign({}, { openTrigger: 'data-micromodal-trigger' }, config);
+
+      // Collects all the nodes with the trigger
+      var triggers = [].concat(toConsumableArray(document.querySelectorAll('[' + options.openTrigger + ']')));
+
+      // Makes a mappings of modals with their trigger nodes
+      var triggerMap = generateTriggerMap(triggers, options.openTrigger);
+
+      // Checks if modals and triggers exist in dom
+      if (options.debugMode === true && validateArgs(triggers, triggerMap) === false) return;
+
+      // For every target modal creates a new instance
+      for (var key in triggerMap) {
+        var value = triggerMap[key];
+        options.targetModal = key;
+        options.triggers = [].concat(toConsumableArray(value));
+        new Modal(options); // eslint-disable-line no-new
+      }
+    };
+
+    /**
+     * Shows a particular modal
+     * @param  {string} targetModal [The id of the modal to display]
+     * @param  {object} config [The configuration object to pass]
+     * @return {void}
+     */
+    var show = function show(targetModal, config) {
+      var options = config || {};
+      options.targetModal = targetModal;
+
+      // Checks if modals and triggers exist in dom
+      if (options.debugMode === true && validateModalPresence(targetModal) === false) return;
+
+      // stores reference to active modal
+      activeModal = new Modal(options); // eslint-disable-line no-new
+      activeModal.showModal();
+    };
+
+    /**
+     * Closes the active modal
+     * @return {void}
+     */
+    var close = function close() {
+      activeModal.closeModal();
+    };
+
+    return { init: init, show: show, close: close };
+  }();
+
+  return MicroModal;
+});
+
+},{}],10:[function(require,module,exports){
+'use strict';
+
+// element-closest | CC0-1.0 | github.com/jonathantneal/closest
+
+(function (ElementProto) {
+	if (typeof ElementProto.matches !== 'function') {
+		ElementProto.matches = ElementProto.msMatchesSelector || ElementProto.mozMatchesSelector || ElementProto.webkitMatchesSelector || function matches(selector) {
+			var element = this;
+			var elements = (element.document || element.ownerDocument).querySelectorAll(selector);
+			var index = 0;
+
+			while (elements[index] && elements[index] !== element) {
+				++index;
+			}
+
+			return Boolean(elements[index]);
+		};
+	}
+
+	if (typeof ElementProto.closest !== 'function') {
+		ElementProto.closest = function closest(selector) {
+			var element = this;
+
+			while (element && element.nodeType === 1) {
+				if (element.matches(selector)) {
+					return element;
+				}
+
+				element = element.parentNode;
+			}
+
+			return null;
+		};
+	}
+})(window.Element.prototype);
+
+},{}],11:[function(require,module,exports){
 "use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -27076,7 +26863,220 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 	return jQuery;
 });
 
-},{}],17:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/
+
+'use strict';
+/* eslint-disable no-unused-vars */
+
+var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+function toObject(val) {
+	if (val === null || val === undefined) {
+		throw new TypeError('Object.assign cannot be called with null or undefined');
+	}
+
+	return Object(val);
+}
+
+function shouldUseNative() {
+	try {
+		if (!Object.assign) {
+			return false;
+		}
+
+		// Detect buggy property enumeration order in older V8 versions.
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+		var test1 = new String('abc'); // eslint-disable-line no-new-wrappers
+		test1[5] = 'de';
+		if (Object.getOwnPropertyNames(test1)[0] === '5') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test2 = {};
+		for (var i = 0; i < 10; i++) {
+			test2['_' + String.fromCharCode(i)] = i;
+		}
+		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+			return test2[n];
+		});
+		if (order2.join('') !== '0123456789') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test3 = {};
+		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+			test3[letter] = letter;
+		});
+		if (Object.keys(Object.assign({}, test3)).join('') !== 'abcdefghijklmnopqrst') {
+			return false;
+		}
+
+		return true;
+	} catch (err) {
+		// We don't expect any of the above to throw, but better to be safe.
+		return false;
+	}
+}
+
+module.exports = shouldUseNative() ? Object.assign : function (target, source) {
+	var from;
+	var to = toObject(target);
+	var symbols;
+
+	for (var s = 1; s < arguments.length; s++) {
+		from = Object(arguments[s]);
+
+		for (var key in from) {
+			if (hasOwnProperty.call(from, key)) {
+				to[key] = from[key];
+			}
+		}
+
+		if (getOwnPropertySymbols) {
+			symbols = getOwnPropertySymbols(from);
+			for (var i = 0; i < symbols.length; i++) {
+				if (propIsEnumerable.call(from, symbols[i])) {
+					to[symbols[i]] = from[symbols[i]];
+				}
+			}
+		}
+	}
+
+	return to;
+};
+
+},{}],13:[function(require,module,exports){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var assign = require('object-assign');
+var delegate = require('../delegate');
+var delegateAll = require('../delegateAll');
+
+var DELEGATE_PATTERN = /^(.+):delegate\((.+)\)$/;
+var SPACE = ' ';
+
+var getListeners = function getListeners(type, handler) {
+  var match = type.match(DELEGATE_PATTERN);
+  var selector;
+  if (match) {
+    type = match[1];
+    selector = match[2];
+  }
+
+  var options;
+  if ((typeof handler === 'undefined' ? 'undefined' : _typeof(handler)) === 'object') {
+    options = {
+      capture: popKey(handler, 'capture'),
+      passive: popKey(handler, 'passive')
+    };
+  }
+
+  var listener = {
+    selector: selector,
+    delegate: (typeof handler === 'undefined' ? 'undefined' : _typeof(handler)) === 'object' ? delegateAll(handler) : selector ? delegate(selector, handler) : handler,
+    options: options
+  };
+
+  if (type.indexOf(SPACE) > -1) {
+    return type.split(SPACE).map(function (_type) {
+      return assign({ type: _type }, listener);
+    });
+  } else {
+    listener.type = type;
+    return [listener];
+  }
+};
+
+var popKey = function popKey(obj, key) {
+  var value = obj[key];
+  delete obj[key];
+  return value;
+};
+
+module.exports = function behavior(events, props) {
+  var listeners = Object.keys(events).reduce(function (memo, type) {
+    var listeners = getListeners(type, events[type]);
+    return memo.concat(listeners);
+  }, []);
+
+  return assign({
+    add: function addBehavior(element) {
+      listeners.forEach(function (listener) {
+        element.addEventListener(listener.type, listener.delegate, listener.options);
+      });
+    },
+    remove: function removeBehavior(element) {
+      listeners.forEach(function (listener) {
+        element.removeEventListener(listener.type, listener.delegate, listener.options);
+      });
+    }
+  }, props);
+};
+
+},{"../delegate":16,"../delegateAll":15,"object-assign":12}],14:[function(require,module,exports){
+"use strict";
+
+module.exports = function compose(functions) {
+  return function (e) {
+    return functions.some(function (fn) {
+      return fn.call(this, e) === false;
+    }, this);
+  };
+};
+
+},{}],15:[function(require,module,exports){
+'use strict';
+
+var delegate = require('../delegate');
+var compose = require('../compose');
+
+var SPLAT = '*';
+
+module.exports = function delegateAll(selectors) {
+  var keys = Object.keys(selectors);
+
+  // XXX optimization: if there is only one handler and it applies to
+  // all elements (the "*" CSS selector), then just return that
+  // handler
+  if (keys.length === 1 && keys[0] === SPLAT) {
+    return selectors[SPLAT];
+  }
+
+  var delegates = keys.reduce(function (memo, selector) {
+    memo.push(delegate(selector, selectors[selector]));
+    return memo;
+  }, []);
+  return compose(delegates);
+};
+
+},{"../compose":14,"../delegate":16}],16:[function(require,module,exports){
+'use strict';
+
+// polyfill Element.prototype.closest
+require('element-closest');
+
+module.exports = function delegate(selector, fn) {
+  return function delegation(event) {
+    var target = event.target.closest(selector);
+    if (target) {
+      return fn.call(target, event);
+    }
+  };
+};
+
+},{"element-closest":10}],17:[function(require,module,exports){
 'use strict';
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -27433,4 +27433,4 @@ new datatablesExamples();
 
 module.exports = datatablesExamples;
 
-},{"datatables.net":15,"datatables.net-responsive":13,"datatables.net-select":14,"dkfds/src/js/components/dropdown.js":8,"dkfds/src/vendor/micromodal.js":12,"jquery":16}]},{},[17]);
+},{"datatables.net":4,"datatables.net-responsive":2,"datatables.net-select":3,"dkfds/src/js/components/dropdown.js":5,"dkfds/src/vendor/micromodal.js":9,"jquery":11}]},{},[17]);
