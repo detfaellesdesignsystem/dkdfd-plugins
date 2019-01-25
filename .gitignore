@@ -21,3 +21,5 @@ dkfds-*.zip
 #build/components/
 
 build/
+package-lock.json
+.idea

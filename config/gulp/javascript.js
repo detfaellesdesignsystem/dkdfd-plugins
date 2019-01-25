@@ -18,7 +18,8 @@ gulp.task(task, function (done) {
   
   var files = [
       'src/components/datatables/example/js/dkfds-datatables-examples.js',
-      'src/components/selectwoo/example/js/dkfds-selectwoo-examples.js'
+    'src/components/selectwoo/example/js/dkfds-selectwoo-examples.js',
+    'src/components/pikaday/example/js/dkfds-pikaday-examples.js'
   ];
 
   //Create a bundle for each starting file in the list above. 
