@@ -2,6 +2,8 @@ window.$ = window.jQuery = require("jquery");
 const selectWoo = require('select-woo')();
 
 const jsSelectorSelectwoo_Example1 = '#js-selectwoo-example1';
+const jsSelectorSelectwoo_Example2 = '#js-selectwoo-example2';
+const jsSelectorSelectwoo_Example3 = '#js-selectwoo-example3';
 
 class selectwooExamples {
   constructor(el){
@@ -10,12 +12,51 @@ class selectwooExamples {
     
     //Init a normal selectwoo 
     $(jsSelectorSelectwoo_Example1).selectWoo({
+      multiple: true,
       placeholder: "Vælg et element på listen",
       data: countries,
       width: "100%",
       language: "da"
     });
-    $(jsSelectorSelectwoo_Example1).removeClass('d-none'); //avoid flash of unstyled content. 
+    $(jsSelectorSelectwoo_Example1).removeClass('d-none'); //avoid flash of unstyled content.
+
+    //Init an ajax selectwoo
+    $(jsSelectorSelectwoo_Example2).selectWoo({
+      multiple: true,
+      placeholder: "Vælg et element på listen",
+      width: "100%",
+      language: {
+        "noResults": function(){
+          return "Ingen resultater fundet";
+        }
+      },
+      ajax: {
+        url: 'https://jsonplaceholder.typicode.com/users',
+        dataType: 'json',
+        processResults: function (data) {
+          return {
+            results: $.map(data, function (item) {
+              return {
+                text: item.name,
+                id: item.id
+              }
+            })
+          };
+        }
+      }
+     });
+    $(jsSelectorSelectwoo_Example2).removeClass('d-none'); //avoid flash of unstyled content.
+
+
+    //Init a normal selectwoo
+    $(jsSelectorSelectwoo_Example3).selectWoo({
+      multiple: true,
+      placeholder: "Vælg et element på listen",
+      width: "100%",
+      language: "da"
+    });
+    $(jsSelectorSelectwoo_Example3).removeClass('d-none'); //avoid flash of unstyled content.
+
   }
 }
 

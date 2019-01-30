@@ -15433,6 +15433,8 @@ window.$ = window.jQuery = require("jquery");
 var selectWoo = require('select-woo')();
 
 var jsSelectorSelectwoo_Example1 = '#js-selectwoo-example1';
+var jsSelectorSelectwoo_Example2 = '#js-selectwoo-example2';
+var jsSelectorSelectwoo_Example3 = '#js-selectwoo-example3';
 
 var selectwooExamples = function selectwooExamples(el) {
   _classCallCheck(this, selectwooExamples);
@@ -15441,12 +15443,50 @@ var selectwooExamples = function selectwooExamples(el) {
 
   //Init a normal selectwoo 
   $(jsSelectorSelectwoo_Example1).selectWoo({
+    multiple: true,
     placeholder: "Vælg et element på listen",
     data: countries,
     width: "100%",
     language: "da"
   });
-  $(jsSelectorSelectwoo_Example1).removeClass('d-none'); //avoid flash of unstyled content. 
+  $(jsSelectorSelectwoo_Example1).removeClass('d-none'); //avoid flash of unstyled content.
+
+  //Init an ajax selectwoo
+  $(jsSelectorSelectwoo_Example2).selectWoo({
+    multiple: true,
+    placeholder: "Vælg et element på listen",
+    width: "100%",
+    language: {
+      "noResults": function noResults() {
+        return "Ingen resultater fundet";
+      }
+    },
+    ajax: {
+      url: 'https://jsonplaceholder.typicode.com/users',
+      dataType: 'json',
+      processResults: function processResults(data) {
+        return {
+          results: $.map(data, function (item) {
+            return {
+              text: item.name,
+              id: item.id
+            };
+          })
+        };
+      }
+    }
+  });
+  $(jsSelectorSelectwoo_Example2).removeClass('d-none'); //avoid flash of unstyled content.
+
+
+  //Init a normal selectwoo
+  $(jsSelectorSelectwoo_Example3).selectWoo({
+    multiple: true,
+    placeholder: "Vælg et element på listen",
+    width: "100%",
+    language: "da"
+  });
+  $(jsSelectorSelectwoo_Example3).removeClass('d-none'); //avoid flash of unstyled content.
 };
 
 new selectwooExamples();
