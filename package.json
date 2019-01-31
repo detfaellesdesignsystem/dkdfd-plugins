@@ -1,6 +1,6 @@
 {
   "name": "dkfds-plugins",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Plugins projektet til Det Fælles Designsystem.",
   "engines": {
     "node": ">= 4"
