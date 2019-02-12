@@ -34,9 +34,9 @@ Only the css-themes are to be used. The HTML and javascript are just example cod
 
 To include a theme simply include the one of the files from the /dist/css folder:
 ```sh
-<link rel="stylesheet" href="[path-to-plugins-project]/dist/css/dkfds-datatables-theme.min.css">
+<link rel="stylesheet" href="[path-to-plugins-project]/dist/css/dkfds-datatables-theme.standalone.min.css">
 ``` 
 or include it in your scss:
 ```sh
-@import "~dkfds-plugins/dist/datatables/style/dkfds-datatables-theme.scss";
+@import "~dkfds-plugins/dist/scss/dkfds-datatables-theme.scss";
 ```
