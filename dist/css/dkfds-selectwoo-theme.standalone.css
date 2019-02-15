@@ -123,7 +123,7 @@
 }
 
 .select2-container.select2-container--default .select2-results__option[role="option"]:not(.select2-results__option--load-more):not(.loading-results).select2-results__option--highlighted, .select2-container.select2-container--default .select2-results__option[role="option"]:not(.select2-results__option--load-more):not(.loading-results).select2-results__option--highlighted[data-selected=true] {
-  background-color: #f5f5f5;
+  background-color: #F5F5F5;
 }
 
 .select2-container.select2-container--default .select2-results__option[role="option"]:not(.select2-results__option--load-more):not(.loading-results).select2-results__message {
