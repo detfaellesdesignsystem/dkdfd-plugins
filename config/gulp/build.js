@@ -32,7 +32,6 @@ gulp.task('build', function (done) {
     'copy-dkfds-vendor',
     [
       'sass',
-      'javascript'
     ],
     done
   );

@@ -17,9 +17,9 @@ gulp.task('copy-dist-sass', function () {
   dutil.logMessage('copy-dist-sass', 'Copying all SASS to dist dir');
 
   var stream = gulp.src([
-    'src/components/datatables/style/dkfds-datatables-theme.scss',
-    'src/components/selectwoo/style/dkfds-selectwoo-theme.scss',
-    'src/components/pikaday/style/dkfds-pikaday-theme.scss'
+    'src/components/datatables/dkfds-datatables-theme.scss',
+    'src/components/selectwoo/dkfds-selectwoo-theme.scss',
+    'src/components/pikaday/dkfds-pikaday-theme.scss'
   ])
     .pipe(gulp.dest('dist/scss'));
 
@@ -32,9 +32,9 @@ gulp.task(task, ['copy-dist-sass' ], function () {
 
   var stream = gulp.src(
     [
-      'src/components/datatables/example/style/dkfds-datatables-theme.standalone.scss',
-      'src/components/selectwoo/example/style/dkfds-selectwoo-theme.standalone.scss',
-      'src/components/pikaday/example/style/dkfds-pikaday-theme.standalone.scss'
+      'src/components/datatables/dkfds-datatables-theme.standalone.scss',
+      'src/components/selectwoo/dkfds-selectwoo-theme.standalone.scss',
+      'src/components/pikaday/dkfds-pikaday-theme.standalone.scss'
     ]) 
     // 1. do the version replacement
     .pipe(replace(

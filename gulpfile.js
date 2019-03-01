@@ -1,6 +1,5 @@
 // Bring in individual Gulp configurations
 require('./config/gulp/sass');
-require('./config/gulp/javascript');
 require('./config/gulp/build');
 require('./config/gulp/release');
 require('./config/gulp/watch');
