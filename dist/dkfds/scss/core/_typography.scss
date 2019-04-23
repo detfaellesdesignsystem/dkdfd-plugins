@@ -29,11 +29,6 @@ a {
 
   }
 
-  &:active,
-  &.link-active {
-    color: $color-link-active;
-  }
-
   &:focus,
   &.link-focus {
     color: $color-link-focus;
@@ -49,7 +44,8 @@ a {
   &:disabled,
   &.disabled {
     cursor: not-allowed !important;
-    color: $color-gray-light !important;
+    color: $color-gray-002 !important;
+    opacity: 0.3;
     &:focus{
       outline: none;
       background-color: transparent;
@@ -219,7 +215,7 @@ strong, b, .bold {
 small, .small-text {
   font-size: $small-text; //1.3rem
   line-height: $small-text-line-height; //1.6rem
-  font-weight: $font-weight-medium;
+  font-weight: $font-weight-normal;
 }
 
 .form-label {
@@ -294,7 +290,6 @@ h5, .h5, h6, .h6{
 //a function link, does not look like a link
 .function-link{
   @include body-copy-text;
-  display: inline-flex;
   &:hover, &:visited, &:focus{
     color: $color-text;
   }
@@ -314,6 +309,9 @@ h5, .h5, h6, .h6{
   line-height: $body-text-line-height;
   .icon-svg{
     margin-left: map-get($spacers, 2);
+    width: 1.6rem;
+    height: 1.6rem;
+    fill: currentColor;
   }
 }
 
@@ -348,7 +346,7 @@ h6, .h6{
   max-width: $text-max-width;
 }
 p,
-ul:not(.accordion):not(.accordion-bordered):not(.nav-primary),
+ul:not(.accordion):not(.accordion-bordered):not(.nav-primary):not(.inline-list),
 ol:not(.accordion):not(.accordion-bordered){
   max-width: $text-max-width;
 }
