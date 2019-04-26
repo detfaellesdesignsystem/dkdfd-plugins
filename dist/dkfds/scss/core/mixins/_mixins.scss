@@ -40,7 +40,21 @@
     margin-bottom: 0;
     margin-top: 0;
     padding-left: 0;
-    &:before {
+    &::before {
+      content: "" !important;
+      padding-right: 0 !important;
+    }
+  }
+}
+
+
+// nobullet list helper
+@mixin nobullet-list() {
+  list-style-type: none;
+  padding-left: 0;
+  > li {
+    padding-left: 0;
+    &::before {
       content: "" !important;
       padding-right: 0 !important;
     }

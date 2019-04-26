@@ -29,6 +29,9 @@
         &:last-child{
             border-right: none;
         }
+      &.break-word{
+        word-break: break-all;
+      }
     }
 
     thead {
@@ -68,7 +71,7 @@
                 
             }
         }
-        border: none;
+        border-color: transparent;
         thead {
             background-color: transparent;
             th{

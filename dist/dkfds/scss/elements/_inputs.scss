@@ -86,6 +86,9 @@ textarea.form-input{
     outline: $focus-outline;
     outline-offset: $focus-spacing;
   }
+  &::-ms-expand {
+    display: none;
+  }
 
   &:disabled {
     background-color: $color-gray-pale;
@@ -136,6 +139,15 @@ input[type=text]:disabled, input[type=textarea]:disabled{
   background: $color-gray-pale;
   color:$color-gray-medium-light;
   cursor: not-allowed;
+}
+
+
+input[type=text]:read-only, input[type=textarea]:read-only{
+  background-color: transparent;
+  color:$color-black;
+  border: none;
+  cursor: default;
+  padding: 0;
 }
 
 /////////////////////////////////
