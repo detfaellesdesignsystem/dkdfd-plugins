@@ -1,6 +1,6 @@
 {
   "name": "dkfds-plugins",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "Plugins projektet til Det Fælles Designsystem.",
   "engines": {
     "node": ">= 4"
@@ -27,18 +27,13 @@
     "browserify": "^13.0.0",
     "classlist-polyfill": "^1.0.3",
     "core-js": "^2.5.7",
-    "datatables.net-dt": "^1.10.16",
-    "datatables.net-responsive": "^2.2.1",
-    "datatables.net-select": "^1.2.5",
     "dkfds": "*",
     "domready": "^1.0.8",
     "elem-dataset": "^1.1.1",
     "lodash.debounce": "^4.0.7",
     "moment": "^2.22.1",
     "object-assign": "^4.1.1",
-    "pikaday": "^1.8.0",
-    "receptor": "^1.0.0",
-    "select-woo": "^1.0.1"
+    "receptor": "^1.0.0"
   },
   "devDependencies": {
     "@18f/stylelint-rules": "^2.0.0",
