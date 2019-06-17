@@ -19,14 +19,15 @@ gulp.task('copy-dist-sass', function () {
   var stream = gulp.src([
     'src/components/datatables/dkfds-datatables-theme.scss',
     'src/components/selectwoo/dkfds-selectwoo-theme.scss',
-    'src/components/pikaday/dkfds-pikaday-theme.scss'
+    'src/components/pikaday/dkfds-pikaday-theme.scss',
+    'src/components/tippy/dkfds-tippy-theme.scss'
   ])
     .pipe(gulp.dest('dist/scss'));
 
   return stream;
 });
 
-gulp.task(task, ['copy-dist-sass' ], function () { 
+gulp.task(task, ['copy-dist-sass' ], function () {
 
   dutil.logMessage(task, 'Compiling Sass');
 
@@ -34,8 +35,9 @@ gulp.task(task, ['copy-dist-sass' ], function () {
     [
       'src/components/datatables/dkfds-datatables-theme.standalone.scss',
       'src/components/selectwoo/dkfds-selectwoo-theme.standalone.scss',
-      'src/components/pikaday/dkfds-pikaday-theme.standalone.scss'
-    ]) 
+      'src/components/pikaday/dkfds-pikaday-theme.standalone.scss',
+      'src/components/tippy/dkfds-tippy-theme.standalone.scss'
+    ])
     // 1. do the version replacement
     .pipe(replace(
       /\bdkfds plugins @version\b/g,
