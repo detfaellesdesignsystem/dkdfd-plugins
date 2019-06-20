@@ -3,15 +3,17 @@
   @include unstyled-list;
   list-style-type: none;
   padding: 0;
-  @include media-breakpoint-up(md) {
-    display: flex;
-  }
+  overflow: hidden;
   border-bottom: $outer-border;
 
   li {
+    float: none; 
     margin-bottom: 0;
-
-
+    float: none; 
+ 
+    @include media-breakpoint-up(md) {
+      float: left; 
+    }
 
     a {
       display: block;
@@ -28,11 +30,12 @@
       
       
       &:hover {
+        color: $color-primary;
         box-shadow: inset 0px -7px 0px 0px $tabs-active-border-color
       }
 
       &:focus{
-        outline: $focus-outline;
+        outline: 0px solid $color-focus;
       }
 
       &.active {

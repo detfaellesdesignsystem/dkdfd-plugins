@@ -12,7 +12,7 @@ ul {
     position: relative;
     padding-left: 37px;
     line-height: $body-text-line-height;
-    &::before {
+    &:before {
       content: "\2022";
       position: absolute;
       left: 23px;
@@ -28,28 +28,20 @@ ol {
     margin-top:map-get($spacers, 3);
     list-style: none;
     position: relative;
-    padding-left: 4rem;
+    padding-left: 37px;
     line-height: $body-text-line-height;
 
     &:before { 
       content: counters(item, ".") "."; 
       counter-increment: item; 
       font-weight: $font-weight-medium;
-      left: 0px;
       position: absolute;
-      width: 4rem;
-      padding-right: 0.5rem;
-      text-align: right;
+      left: 20px;
     }
-
     ol {
       li {
-        ol {
-          li {
-            &:before {
-              position: relative;
-            }
-          }
+        &:before { 
+          left: 6px;
         }
       }
     }
@@ -62,12 +54,6 @@ ol {
 .unstyled-list {
   @include unstyled-list;
 }
-
- // Unstyled lists
- .nobullet-list {
-   @include nobullet-list;
- }
-
 
 .inline-list {
   @include unstyled-list;

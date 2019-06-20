@@ -29,7 +29,7 @@
   padding-left: 0;
 }
 
-.select2 ul > li::before, .select2-container ul > li::before {
+.select2 ul > li:before, .select2-container ul > li:before {
   content: "" !important;
   padding-right: 0 !important;
 }
