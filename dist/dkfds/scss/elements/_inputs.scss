@@ -33,6 +33,11 @@
   max-width: 32rem;
   margin-top: map-get($spacers, 3);
   text-align: left;
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    /* IE10+ CSS styles go here */
+    height: calc(#{$input-line-height} + (8px * 2));
+  }
+
   &:focus, &.focus{
     outline: $focus-outline;
     outline-offset: $focus-spacing;
@@ -42,13 +47,10 @@
 table {
   .form-input {
     margin-top:0;
-  } 
-  textarea.form-input{
-    height: 4rem;
   }
 }
 textarea.form-input{
-  height: 16rem;
+  height: auto;
 }
 
 ////////////////
@@ -62,6 +64,7 @@ textarea.form-input{
   display: block;
   font-size: $input-font-size;
   line-height: $input-line-height;
+  height: calc(#{$input-line-height} + (8px * 2));
   max-width: 32rem;
   width: 100%;
   margin-top: $input-top-margin;
@@ -86,6 +89,9 @@ textarea.form-input{
     outline: $focus-outline;
     outline-offset: $focus-spacing;
   }
+  &::-ms-expand {
+    display: none;
+  }
 
   &:disabled {
     background-color: $color-gray-pale;
@@ -97,7 +103,7 @@ textarea.form-input{
 table {
   .form-select {
     margin-top:0;
-  } 
+  }
 }
 
 //////////////////////
@@ -132,10 +138,24 @@ table {
   }
 }
 
-input[type=text]:disabled, input[type=textarea]:disabled{
+input[type=text]:disabled, textarea:disabled{
   background: $color-gray-pale;
   color:$color-gray-medium-light;
   cursor: not-allowed;
+}
+input[readonly][type=text]{
+  margin-top: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  height: auto;
+}
+input[readonly][type=text], textarea[readonly]{
+  background-color: transparent;
+  color:$color-black;
+  border: none;
+  cursor: default;
+  padding: 0;
+  pointer-events: none;
 }
 
 /////////////////////////////////

@@ -1,4 +1,5 @@
 hr{
-    border-color: $color-gray-light; //inner border color
-    border-top: 0;
+    border-top: $inner-border; //inner border color
+    display: block;
+    border-bottom-width: 0;
 }

@@ -29,6 +29,9 @@
         &:last-child{
             border-right: none;
         }
+      &.break-word{
+        word-break: break-all;
+      }
     }
 
     thead {
@@ -51,7 +54,7 @@
         }
     }
 
-    
+
     tr{
         &:last-child{
             td{
@@ -65,10 +68,10 @@
         tr {
             &:last-child{
                 border-bottom: $inner-border;
-                
+
             }
         }
-        border: none;
+        border-color: transparent;
         thead {
             background-color: transparent;
             th{
@@ -83,7 +86,7 @@
                 }
                 &:last-child{
                     padding-right: 0;
-                    
+
                 }
             }
         }
@@ -105,7 +108,7 @@
                         //border-top-color: transparent;
                         //border-top-color: transparent;
                     }
-                    
+
                 }
                 &:last-child{
                     td, th{
@@ -124,14 +127,14 @@
                 border-right-color: transparent;
             }
         }
-    
+
         tbody{
             td, th{
                 border-right: transparent;
             }
         }
     }
-      
+
 
     //zebra lines
     &.table--zebra {
@@ -175,6 +178,8 @@
     //make row into a "card" on phone
     &.table--responsive-headers{
         @include media-breakpoint-down(sm) {
+            display: block;
+
             thead{
                 display: none;
             }
@@ -187,7 +192,7 @@
             tr td, tr th {
                 display: block;
                 border: none !important;
-        
+
                 &[data-title]:not([data-title=""]):before {
                     content: attr(data-title);
                     text-align: left;
