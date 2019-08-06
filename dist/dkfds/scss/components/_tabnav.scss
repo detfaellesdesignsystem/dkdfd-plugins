@@ -28,6 +28,7 @@
       
       
       &:hover {
+        color: $color-primary;
         box-shadow: inset 0px -7px 0px 0px $tabs-active-border-color
       }
 

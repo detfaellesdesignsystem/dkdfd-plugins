@@ -12,12 +12,15 @@
 
 @mixin nav-active {
   border-bottom: 7px solid $color-primary;
+  padding-bottom: 12px;
 }
 @mixin nav-hover {
   border-bottom: 7px solid $color-primary;
+  padding-bottom: 12px;
 }
 @mixin nav-focus {
   border-bottom: 7px solid $color-primary;
+  padding-bottom: 12px;
 }
 
 .navbar {
@@ -50,7 +53,7 @@
 
 .nav-primary {
   @include unstyled-list;
-  display: flex;
+  display: flex; 
   flex-direction: column;
   margin-top: 8px;
 
@@ -77,9 +80,6 @@
       padding-bottom: calc(#{map-get($spacers, 4)} - 1px);
       white-space: nowrap;
 
-      @include media-breakpoint-up(#{$nav-responsive-breakpoint}) {
-        padding-bottom: 0px;
-      }
       &:hover {
         @include media-breakpoint-up(#{$nav-responsive-breakpoint}) {
           background-color: transparent;
@@ -107,6 +107,16 @@
     }
   }
 
+  .current {
+    @include media-breakpoint-up(#{$nav-responsive-breakpoint}) {
+      span {
+        @include nav-active;
+        @include nav-hover;
+        @include nav-focus;
+      }
+    }
+  }
+
   .nav-link {
     &:hover {
       @media (max-width: $nav-responsive-breakpoint) {
@@ -120,29 +130,11 @@
         }
       }
     }
-    span{
-      @include media-breakpoint-up(#{$nav-responsive-breakpoint}) {
-        display: block;
-        border-bottom: 7px solid transparent;
-      }
-      @include media-breakpoint-up(#{$nav-responsive-breakpoint}) {
-        padding-bottom: 9px;
-      }
-    }
-  }
-
-  .current {
-    @include media-breakpoint-up(#{$nav-responsive-breakpoint}) {
-      span {
-        @include nav-active;
-        @include nav-hover;
-        @include nav-focus;
-      }
-    }
   }
 
   a.current{
     font-weight: $font-weight-semibold;
+    color: $color-primary;
   }
   button.current{
     font-weight: $font-weight-semibold;
@@ -169,7 +161,7 @@
 
 .nav{
   .overflow-menu{
-    display: block; //IE 11 fix
+    display: block; //IE 11 fix 
   }
   @media (max-width: $nav-responsive-breakpoint) {
     //overflow menu (the ones not in nav-primary)
@@ -181,7 +173,7 @@
         padding-left: 0;
         padding-right: 0;
         padding-top: 16px;
-        padding-bottom: 16px;
+        padding-bottom: 16px; 
         &:after, &:before{
           display: none !important;
         }
@@ -215,7 +207,7 @@
       line-height: $base-line-height;
       display: block;
       padding-top: calc(#{map-get($spacers, 4)} - 1px);
-      padding-bottom: 0;
+      padding-bottom: calc(#{map-get($spacers, 4)} - 1px);
       white-space: nowrap;
       width: 100%;
       @include media-breakpoint-up(#{$nav-responsive-breakpoint}) {
@@ -223,12 +215,6 @@
       }
       span{
         padding-right: 24px;
-        padding-bottom: calc(#{map-get($spacers, 4)} - 1px);
-        display: block;
-
-        @include media-breakpoint-up(#{$nav-responsive-breakpoint}) {
-          padding-bottom: 9px;
-        }
       }
       &:hover {
         span {
@@ -245,13 +231,13 @@
       &:hover{
         text-decoration: none;
       }
-
+  
       &[aria-expanded=false] {
         background-image: url('#{$icons-folder-path}/plus.svg');
         background-repeat: no-repeat;
         background-position: right 16px center;
         background-size: 24px;
-
+  
         @include media-breakpoint-up(#{$nav-responsive-breakpoint}) {
           background-image: url('#{$icons-folder-path}/angle-arrow-down.svg');
           background-position: right 1rem center;
@@ -259,13 +245,13 @@
           border-right: 1px solid transparent;
         }
       }
-
-      &[aria-expanded=true] {
+  
+      &[aria-expanded=true] { 
         background-image: url('#{$icons-folder-path}/minus.svg');
         background-repeat: no-repeat;
         background-position: right 16px center;
         background-size: 24px;
-
+  
         @include media-breakpoint-up(#{$nav-responsive-breakpoint}) {
           background-image: url('#{$icons-folder-path}/angle-arrow-down-white.svg');
           background-position: right 1rem center;
@@ -292,7 +278,7 @@
       border-top: $inner-border;
       padding-top: 0;
       padding-bottom: 0;
-
+  
       @include media-breakpoint-up(#{$nav-responsive-breakpoint}) {
         width: 30rem;
         border: $outer-border;
@@ -312,7 +298,7 @@
           line-height: $small-text-line-height;
         }
         .overflow-list {
-          margin-left: map-get($spacers, 4);
+          margin-left: 16px;
           li {
             a {
               border-top: 0;
@@ -321,21 +307,16 @@
             &:first-of-type a {
               padding: 0px 0 8px 0;
             }
-            @include media-breakpoint-up(#{$nav-responsive-breakpoint}) {
-              &:last-of-type a {
-                padding: 8px 0 32px 0;
-              }
+            &:last-of-type a {
+              padding: 8px 0 32px 0;
             }
           }
-        }
-        .sidenav-sub_list{
-          margin-left: map-get($spacers, 4);
         }
 
       }
 
       button{
-          @include button-unstyled;
+          @include button-unstyled;   
       }
       a{
           @include body-copy-text;
@@ -353,7 +334,7 @@
             color: #fff!important;
           }
       }
-
+  
       .current {
         font-weight: $font-weight-semibold;
         color: $color-primary;
@@ -361,12 +342,12 @@
           color: #fff;
         }
       }
-
+  
       button, a{
         padding: 15px 0 15px 0;
         border-top: $inner-border;
         width: 100%;
-
+  
         @include media-breakpoint-up(#{$nav-responsive-breakpoint}) {
           padding: 8px 16px;
           margin: 0;
