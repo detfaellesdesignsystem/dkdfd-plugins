@@ -63,9 +63,6 @@ $icons: (
     &--inherit-color{
         fill: currentColor; //svg inherit color
     }
-    &:focus{
-      outline: none;
-    }
 }
 .inline-svg{
   height: 1em;
