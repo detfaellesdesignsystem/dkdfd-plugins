@@ -52,6 +52,7 @@ $z-index-nav:     9000;
     width: unset;
     margin-left: auto;
     display: flex;
+    align-items: center;
     margin-right: map-get($spacers, 4);
     .icon-svg{
       margin: 0 8px 0 0;
@@ -66,8 +67,8 @@ $z-index-nav:     9000;
   }
 
   .portal-header{
-      border-bottom: $inner-border;
-      width: 100%;
+    border-bottom: $inner-border;
+    width: 100%;
     .portal-header-inner{
       width: 100%;
       padding-top: calc(#{map-get($spacers, 4)} - 1px);
