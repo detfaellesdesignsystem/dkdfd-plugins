@@ -79,6 +79,9 @@ table.dataTable {
         td, th{
             padding: $datatables-cell-padding;
         }
+        tr table tr{
+          background-color: transparent;
+        }
 
         //Expanded row
         tr.child{

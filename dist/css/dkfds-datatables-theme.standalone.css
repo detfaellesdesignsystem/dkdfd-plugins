@@ -78,6 +78,10 @@ table.dataTable tbody td, table.dataTable tbody th {
   padding: calc(16px - 1px);
 }
 
+table.dataTable tbody tr table tr {
+  background-color: transparent;
+}
+
 table.dataTable tbody tr.child {
   padding: 0px;
 }
