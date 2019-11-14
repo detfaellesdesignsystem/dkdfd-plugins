@@ -76,8 +76,9 @@ table.dataTable {
 
         //Expanded row
         tr.child{
-            padding: $datatables-cell-padding; 
+            padding: 0px;
             td:first-child{
+              padding: 0px;
                 box-shadow: inset 2px 0 0 0 #454545;
             }
 
@@ -93,16 +94,16 @@ table.dataTable {
         //Selected row
         tr.selected-row{
             background-color: $color-gray-mediumpale !important;
-            & + tr.child{ //child row (the expanded row) should have same color as parent. 
+            & + tr.child{ //child row (the expanded row) should have same color as parent.
                 background-color: $color-gray-mediumpale !important;
             }
         }
         //Expanded row inner content
         .details-row-content {
-            padding-right: 32px;
-            padding-left: 54px;
-            padding-top: map-get($spacers, 4);
-            padding-bottom: map-get($spacers, 4);
+            padding-left: map-get($spacers, 9);
+            padding-right: map-get($spacers, 4);
+            padding-top: map-get($spacers, 5);
+            padding-bottom: map-get($spacers, 5);
         }
         .details-control{
             cursor: pointer;
@@ -114,6 +115,12 @@ table.dataTable {
                 height: 24px;
                 display: block;
             }
+        }
+
+        tr {
+          td.details-control + td {
+            padding-left: 0px;
+          }
         }
         //column with edit/delete overflow
         .row-control{
@@ -174,17 +181,17 @@ table.dataTable {
         border-bottom: $outer-border;
     }
 
-    //fix styling for zebra-rows on datatables (because of responsive expandable row). 
+    //fix styling for zebra-rows on datatables (because of responsive expandable row).
     &.table--zebra{
         tr.odd{
             background-color: #fff;
-            & + tr.child{ //child row (the expanded row) should have same color as parent. 
+            & + tr.child{ //child row (the expanded row) should have same color as parent.
                 background-color: #fff;
             }
         }
         tr.even{
             background-color: $color-gray-pale;
-            & + tr.child{ //child row (the expanded row) should have same color as parent. 
+            & + tr.child{ //child row (the expanded row) should have same color as parent.
                 background-color: $color-gray-pale;
                 &:hover{
                     background-color: $color-gray-pale !important; //overwrite hover styling

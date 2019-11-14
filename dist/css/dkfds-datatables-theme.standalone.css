@@ -75,10 +75,11 @@ table.dataTable tbody td, table.dataTable tbody th {
 }
 
 table.dataTable tbody tr.child {
-  padding: calc(16px - 1px);
+  padding: 0px;
 }
 
 table.dataTable tbody tr.child td:first-child {
+  padding: 0px;
   box-shadow: inset 2px 0 0 0 #454545;
 }
 
@@ -112,10 +113,10 @@ table.dataTable tbody tr.selected-row + tr.child {
 }
 
 table.dataTable tbody .details-row-content {
-  padding-right: 32px;
-  padding-left: 54px;
-  padding-top: 16px;
-  padding-bottom: 16px;
+  padding-left: 56px;
+  padding-right: 16px;
+  padding-top: 24px;
+  padding-bottom: 24px;
 }
 
 table.dataTable tbody .details-control {
@@ -128,6 +129,10 @@ table.dataTable tbody .details-control:after {
   width: 24px;
   height: 24px;
   display: block;
+}
+
+table.dataTable tbody tr td.details-control + td {
+  padding-left: 0px;
 }
 
 table.dataTable tbody .row-control {
