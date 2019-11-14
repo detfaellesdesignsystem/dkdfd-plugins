@@ -20,6 +20,10 @@ table.dataTable thead th {
   border-bottom: inherit;
 }
 
+table.dataTable thead tr th.details-control + th {
+  padding-left: 0px;
+}
+
 table.dataTable thead .sorting,
 table.dataTable thead .sorting_asc,
 table.dataTable thead .sorting_desc,

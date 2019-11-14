@@ -14,6 +14,12 @@ table.dataTable {
             border-bottom: inherit;
         }
 
+        tr {
+          th.details-control + th{
+            padding-left: 0px;
+          }
+        }
+
         //Sorting
         .sorting,
         .sorting_asc,
@@ -118,7 +124,7 @@ table.dataTable {
         }
 
         tr {
-          td.details-control + td {
+          td.details-control + td{
             padding-left: 0px;
           }
         }
