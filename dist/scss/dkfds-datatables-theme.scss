@@ -83,9 +83,9 @@ table.dataTable {
         //Expanded row
         tr.child{
             padding: 0px;
-            td:first-child{
+            > td:first-child{
               padding: 0px;
-                box-shadow: inset 2px 0 0 0 #454545;
+              box-shadow: inset 2px 0 0 0 #454545;
             }
 
              //Responsive details list

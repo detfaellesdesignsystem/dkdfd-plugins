@@ -82,7 +82,7 @@ table.dataTable tbody tr.child {
   padding: 0px;
 }
 
-table.dataTable tbody tr.child td:first-child {
+table.dataTable tbody tr.child > td:first-child {
   padding: 0px;
   box-shadow: inset 2px 0 0 0 #454545;
 }
