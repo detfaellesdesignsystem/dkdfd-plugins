@@ -26,9 +26,7 @@
   //padding-right: map-get($spacers, 4);
   padding-top: map-get($spacers, 5);
   padding-bottom: map-get($spacers, 5);
-  @include media-breakpoint-up(#{$nav-responsive-breakpoint}) {
-    border-bottom: $inner-border;
-  }
+  border-bottom: $inner-border;
   display: flex;
   flex-direction: column;
 
@@ -39,10 +37,7 @@
   }
 }
 .navbar-primary{
-
-  @include media-breakpoint-up(#{$nav-responsive-breakpoint}) {
-    border-bottom: $outer-border;
-  }
+  border-bottom: $outer-border;
   padding-top: 0;
 }
 .navbar-context-actions{
@@ -74,7 +69,7 @@
     }
     > a {
       text-decoration: none;
-      color: $color-neutral;
+      color: $color-black;
       font-size: $base-font-size;
       line-height: $base-line-height;
       display: block;
@@ -147,11 +142,10 @@
   }
 
   .current > a{
-    font-weight: $font-weight-medium;
-    color: $color-black;
+    font-weight: $font-weight-semibold;
   }
   button.current{
-    font-weight: $font-weight-medium;
+    font-weight: $font-weight-semibold;
   }
 }
 
