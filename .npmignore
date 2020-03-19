@@ -7,3 +7,8 @@ build/
 .editorconfig
 .eslintrc.yml
 package-lock.json
+.idea/
+config
+gulpfile.js
+fractalfile.js
+node_modules
