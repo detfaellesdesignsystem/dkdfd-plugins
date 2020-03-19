@@ -503,6 +503,124 @@ h1, h2, h3, h4, h5, h6, p, legend, strong, b, cite, var, address, dfn {
   text-transform: lowercase;
 }
 
+.tippy-box {
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+  font-weight: 400;
+  color: #1a1a1a;
+  text-transform: none;
+  font-size: 1.6rem;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
+  background-color: #fff;
+  border: 1px solid #747474;
+  background-clip: padding-box;
+  color: #1a1a1a;
+}
+
+.tippy-box > .tippy-backdrop {
+  background-color: #fff;
+}
+
+.tippy-box > .tippy-arrow:after, .tippy-box > .tippy-svg-arrow:after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+}
+
+.tippy-box > .tippy-arrow:after {
+  border-color: transparent;
+  border-style: solid;
+}
+
+.tippy-box[data-placement^=top] > .tippy-arrow:before {
+  border-top-color: #fff;
+}
+
+.tippy-box[data-placement^=top] > .tippy-arrow:after {
+  border-top-color: #747474;
+  border-width: 7px 7px 0;
+  top: 17px;
+  left: 1px;
+}
+
+.tippy-box[data-placement^=top] > .tippy-svg-arrow > svg {
+  top: 16px;
+}
+
+.tippy-box[data-placement^=top] > .tippy-svg-arrow:after {
+  top: 17px;
+}
+
+.tippy-box[data-placement^=bottom] > .tippy-arrow:before {
+  border-bottom-color: #fff;
+  bottom: 16px;
+}
+
+.tippy-box[data-placement^=bottom] > .tippy-arrow:after {
+  border-bottom-color: #747474;
+  border-width: 0 7px 7px;
+  bottom: 17px;
+  left: 1px;
+}
+
+.tippy-box[data-placement^=bottom] > .tippy-svg-arrow > svg {
+  bottom: 16px;
+}
+
+.tippy-box[data-placement^=bottom] > .tippy-svg-arrow:after {
+  bottom: 17px;
+}
+
+.tippy-box[data-placement^=left] > .tippy-arrow:before {
+  border-left-color: #fff;
+}
+
+.tippy-box[data-placement^=left] > .tippy-arrow:after {
+  border-left-color: #747474;
+  border-width: 7px 0 7px 7px;
+  left: 17px;
+  top: 1px;
+}
+
+.tippy-box[data-placement^=left] > .tippy-svg-arrow > svg {
+  left: 11px;
+}
+
+.tippy-box[data-placement^=left] > .tippy-svg-arrow:after {
+  left: 12px;
+}
+
+.tippy-box[data-placement^=right] > .tippy-arrow:before {
+  border-right-color: #fff;
+  right: 16px;
+}
+
+.tippy-box[data-placement^=right] > .tippy-arrow:after {
+  border-width: 7px 7px 7px 0;
+  right: 17px;
+  top: 1px;
+  border-right-color: #747474;
+}
+
+.tippy-box[data-placement^=right] > .tippy-svg-arrow > svg {
+  right: 11px;
+}
+
+.tippy-box[data-placement^=right] > .tippy-svg-arrow:after {
+  right: 12px;
+}
+
+.tippy-box > .tippy-svg-arrow {
+  fill: #fff;
+}
+
+.tippy-box > .tippy-svg-arrow:after {
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCA2czEuNzk2LS4wMTMgNC42Ny0zLjYxNUM1Ljg1MS45IDYuOTMuMDA2IDggMGMxLjA3LS4wMDYgMi4xNDguODg3IDMuMzQzIDIuMzg1QzE0LjIzMyA2LjAwNSAxNiA2IDE2IDZIMHoiIGZpbGw9InJnYmEoMCwgOCwgMTYsIDAuMikiLz48L3N2Zz4=);
+  background-size: 16px 6px;
+  width: 16px;
+  height: 6px;
+}
+
 .popover {
   cursor: pointer;
 }
